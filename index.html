@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>yuqiong</title>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script src="static/reg.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <script src="https://www.best2sit.com/mp/static/qrcode.min.js" type="text/javascript" charset="utf-8"></script>		
+		<script type="text/javascript">			
+			document.body.addEventListener("focusout", () => {
+				//软键盘收起的事件处理
+				setTimeout(() => {
+					const scrollHeight =
+						document.documentElement.scrollTop || document.body.scrollTop || 0;
+					window.scrollTo(0, Math.max(scrollHeight - 1, 0));
+				}, 100);
+			}, { passive: false });
+		</script>
+  </body>
+</html>

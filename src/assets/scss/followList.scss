@@ -1,0 +1,99 @@
+.followList_page {
+    width: 100%;
+    padding-top: 76px;
+    padding-bottom: 20px;
+    ul {
+        padding-top: 22px;
+        width: 100%;
+        height: auto;
+        li {
+            margin: 0 auto;
+            margin-top: 20px;
+            width: 708px;
+            height: auto;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            padding: 0 24px;
+            position: relative;
+            .close {
+                position: absolute;
+                width: 26px;
+                height: 26px;
+                top: 18px;
+                right: 26px;
+            }
+            .morePeople_title {
+                font-size: 36px;
+                color: rgba(77, 165, 247, 1);
+                line-height: 50px;
+                letter-spacing: 2px;
+                text-align: left;
+                height: 88px;
+                line-height: 86px;
+            }
+            .input_box {
+                width: 100%;
+                height: 86px;
+                line-height: 84px;
+                overflow: hidden;
+                position: relative;
+                border-top: 2px solid #eee;
+                font-size: 32px;
+                color: #03274C;
+                letter-spacing: 2px;
+                text-align: left;
+                span {
+                    float: left;
+                    width: 160px;
+                }
+                input {
+                    height: 86px;
+                    font-size: 32px;
+                    float: left;
+                    width: calc(100% - 170px);
+                    color: #99A3B0;
+                    caret-color: #99A3B0;
+                    -webkit-text-fill-color: #99A3B0;
+                    text-align: right;
+                    /*输入文字、placeholder颜色*/
+                }
+                .icon_next{
+                    position: absolute;
+                    right: 0;
+                    width: 20px;
+                    height:30px;
+                }
+            }
+        }
+    }
+    .add {
+        width: 708px;
+        height: 90px;
+        border-radius: 10px;
+        border: 2px solid #3199f9;
+        margin: 0 auto;
+        margin-top: 22px;
+        color: #D8D8D8;
+        font-size: 60px;
+        line-height: 88px;
+        overflow: hidden;
+        background: #fff;
+        font-size: 30px;
+        color: #3199f9;
+        img {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto;
+            margin-top: 12px;
+        }
+    }
+    .bottom{
+        width: 708px;
+        height: 90px;
+        overflow: hidden;
+        margin: 22px auto;     
+        .colorBtnBlue{
+            width: 100%;          
+        }
+    }
+}

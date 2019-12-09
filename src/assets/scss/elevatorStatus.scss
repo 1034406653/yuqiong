@@ -1,0 +1,152 @@
+@keyframes elevatorUp{
+    from{transform: translateY(-259px);}
+    to {transform: translateY(259px);}
+}
+@keyframes elevatorDown{
+    from{transform: translateY(259px);}
+    to {transform: translateY(-259px);}
+}
+.elevatorStatus {
+    .elevatorStatus_main {
+        width: 100%;
+        height: auto;
+        padding-top: 77px;
+        .header {
+            width: 100%;
+            height: 92px;
+            display: flex;
+            padding-left: 30px;
+            padding-top: 32px;
+            .adress_icon {
+                width: 36px;
+                height: 36px;
+                display: block;
+                margin-top: 2px;
+                margin-right: 2px;
+            }
+            span {
+                display: block;
+                color: #333333;
+                font-size: 28px;
+                height: 40px;
+            }
+            .select_icon {
+                width: 32px;
+                height: 32px;
+                margin-top: 4px;
+                margin-left: 6px;
+            }
+        }
+        .elevator_list {
+            width: 100%;
+            height: auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-flow: row wrap;
+            li {
+                width: 344px;
+                height: 563px;
+                background: #fff;
+                margin-bottom: 20px;              
+                .top {
+                    width: 100%;
+                    height: 60px;
+                    display: flex;
+                    padding-left: 30px;
+                    i {
+                        display: flex;
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        margin-top: 22px;
+                        margin-right: 9px;
+                    }
+                    span {
+                        display: block;
+                        color: #333;
+                        font-size: 28px;
+                        line-height: 60px;
+                    }
+                }
+                .main{
+                    width: 300px;
+                    height: 418px;
+                    margin: 0 auto;
+                    background:rgba(223,243,255,0.5);
+                    overflow: hidden;
+                    position: relative;
+                    div{
+                        position: absolute;
+                        top: 159px;
+                        left: 0;
+                        width: 100%;
+                        height: 100px;
+                        background: #AFE2FF;
+                        line-height: 100px;
+                        color: #359EF9;
+                        display: flex;
+                        justify-content: center;
+                        i{
+                            width: 0;
+                            height: 0;
+                            display: block;
+                            border-top: 16px solid transparent;
+                            border-bottom: 16px solid #359EF9;
+                            border-left: 11px solid transparent;
+                            border-right: 11px solid transparent;
+                            margin-top: 24px;
+                        }
+                        span{
+                            display: block;
+                            margin-left: 6px;
+                        }
+                    }                   
+                }
+                .bottom{
+                        line-height: 88px;
+                        color: #44454C;
+                        font-size: 28px;
+                    }
+                &.up {
+                    .top {
+                        i {
+                            background: #359EF9;
+                        }
+                    }
+                    .main{
+                        div{
+                            animation: elevatorUp 4s linear infinite;
+                        }
+                    }
+                }
+                &.down {
+                    .top {
+                        i {
+                            background: #7FD541;
+                        }
+                    }
+                    .main{
+                        div{
+                            animation: elevatorDown 4s linear infinite;
+                        }
+                    }
+                }
+                &.free {
+                    .top {
+                        i {
+                            background: #FFB201;
+                        }
+                    }
+                }
+                &.breakdown {
+                    .top {
+                        i {
+                            background: #F34F4C;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

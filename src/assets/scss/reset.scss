@@ -1,0 +1,91 @@
+/* 初始化 */
+html,
+body {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;   
+    font-size: 24px;
+    color: #03274C;
+    overflow-x: hidden;
+    font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif !important;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    background: rgba(239, 242, 244, 1);
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    p,
+    dl,
+    dt,
+    dd,
+    ul,
+    ol,
+    li,
+    form,
+    img,
+    span,
+    strong,
+    b,
+    em,
+    i,
+    a,
+    button,
+    input,
+    textarea,
+    header,
+    section,
+    video,
+    div {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);       
+    }
+    button {
+        outline: none;
+    }
+    img {
+        display: block;
+        border: 0 none;
+        vertical-align: top;
+    }
+    a {
+        text-decoration: none !important;
+        cursor: pointer;
+        outline: none;
+    }
+    b {
+        font-weight: normal;
+    }
+    i {
+        font-style: normal;
+    }
+    li {
+        list-style: none;
+        vertical-align: top;
+    }
+    input {
+        border: 0;
+        background: none;
+        outline: none;
+    }
+    input:disabled {
+        background-color: transparent !important;
+    }
+    .clearfloat:after {
+        display: block;
+        clear: both;
+        content: '';
+        visibility: hidden;
+        height: 0
+    }
+}

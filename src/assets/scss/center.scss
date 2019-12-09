@@ -1,0 +1,280 @@
+.border2 {
+    width: 100%;
+    height: 2px;
+    background: transparent;
+}
+
+.center_page {
+    width: 100%;
+    height: auto;
+    .header {
+        display: flex;
+        align-items: flex-start;
+        font-size: 18px;
+        height: 280px;
+        background: url('../assets/img/head_bg.png');
+        background-size: 100% 100%;
+        position: relative;
+        margin-bottom: 28px;
+        position: relative;
+        &.vipActive {
+            height: 316px;
+            background: url('../assets/img/head_bg_vipActive.png');
+            background-size: 100% 100%;
+        }
+        .portrait {
+            width: 120px;
+            height: auto;
+            margin-top: 42px;
+            margin-left: 30px;           
+            img {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+            }
+            span {              
+                display: block;
+                width: 116px;
+                height: 34px;
+                line-height: 34px;
+                background: #fff;               
+                color: #333;
+                font-size: 24px;
+                border-radius: 4px;
+                margin-top: 8px;
+            }
+        }
+        .information {
+            width: 590px;
+            height: auto;
+            padding-left: 36px;
+            text-align: left;
+            .p1 {
+                width: 100%;
+                color: #fff;
+                font-size: 40px;
+                padding-top: 64px;
+                font-weight: bold;
+                line-height: 56px;
+                display: flex;
+                span {
+                    display: block;
+                }
+                b {
+                    display: block;
+                    padding: 10px;
+                    margin-top: 5px;
+                    width: 147px;
+                    height: 46px;
+                    font-size: 18px;
+                    text-align: center;
+                    color: #309FF4;
+                    line-height: 28px;
+                    i {                      
+                        display: block;
+                        width: 127px;
+                        height: 26px;
+                        background: rgba(246, 251, 255, 1);
+                        border-radius: 15px;
+                    }
+                }
+            }
+            .p2 {
+                font-size: 24px;
+                color: #fff;
+                line-height: 34px;
+                margin-top: 10px;
+            }
+            .p3 {
+                height: 26px;
+                line-height: 26px;
+                display: flex;
+                margin-top: 12px;
+                span {
+                    display: block;
+                    font-size: 18px;
+                    color: #fff;
+                }
+                b {
+                    display: block;
+                    width: 400px;
+                    height: 5px;
+                    background: rgba(255, 255, 255, 1);
+                    border-radius: 3px;
+                    position: relative;
+                    overflow: hidden;
+                    margin: 0 10px;
+                    margin-top: 9px;
+                    i {
+                        display: block;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 0;
+                        height: 5px;
+                        background: #F2D196;
+                    }
+                }
+                &.percent {
+                    font-size: 24px;
+                }
+            }
+        }
+        .nav_box {
+            position: absolute;
+            width: 136px;
+            height: 100px;
+            top: 64px;
+            right: 27px;
+            text-align: center; 
+            line-height: 30px;
+            font-size: 20px;
+            color: #fff;          
+            display: flex;          
+            .qrcode {
+                width: 78px;
+                img {
+                    width: 50px;
+                    height: 50px;
+                    margin: 0 auto;
+                }
+                span {
+                    display: block;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
+            .message {
+                width: 58px;
+                position: relative;
+                img {
+                    width: 50px;
+                    height: 50px;
+                    margin: 0 auto;
+                }
+                span {
+                    display: block;
+                    height: 30px;
+                    line-height: 30px;
+                }
+                i {
+                    position: absolute;
+                    left: 50%;
+                    margin-left: 8px;
+                    top: 0;
+                    width: 10px;
+                    height: 10px;
+                    background: rgba(255, 0, 0, 1);
+                    border-radius: 50%;
+                }
+                &.noCode {
+                    width: 136px;
+                }
+            }
+            /*span {
+                display: block;
+                width: 172px;
+                height: 50px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(204, 233, 255, 1) 100%);
+                box-shadow: 0px 4px 8px -4px rgba(5, 128, 218, 1);
+                border-radius: 30px 0px 30px 30px;
+                line-height: 50px;
+                color: #333;
+                font-size: 24px;
+            }*/
+        }
+        .vip {
+            position: absolute;
+            width: 656px;
+            height: 184px;
+            top: 178px;
+            left: 50%;
+            margin-left: -328px;
+            color: #EEEBBF;
+            display: flex;
+            .icon {
+                width: 48px;
+                height: 38px;
+                margin: 52px 10px 0 48px;
+            }
+            .s1 {
+                font-size: 28px;
+                line-height: 40px;
+                margin-top: 50px;
+                font-weight: 600;
+            }
+            .s2 {
+                font-size: 20px;
+                line-height: 36px;
+                margin: 50px 6px 0 6px;
+            }
+            .s3 {
+                font-size: 24px;
+                line-height: 34px;
+                margin-top: 54px;
+            }
+            .s4 {
+                font-size: 24px;
+                line-height: 34px;
+                margin-top: 54px;
+                font-weight: 500;
+                margin: 54px 8px 0 50px;
+            }
+            .next {
+                width: 14px;
+                height: 22px;
+                margin-top: 60px;
+            }
+        }
+    }
+    .member {
+        width: 100%;
+        height: 100px;
+        line-height: 100px;
+        font-size: 20px;
+        text-align: center;
+    }
+    .part {
+        width: 690px;
+        margin: 0 auto;
+        margin-bottom: 30px;
+        background: #fff;
+        border-radius: 10px;
+        text-align: center;
+        padding-bottom: 20px;
+        .title {
+            margin: 0 auto;
+            border-bottom: 1px solid #eff2f4;
+            width: 660px;
+            height: 80px;
+            line-height: 80px;
+            text-align: left;
+            font-size: 32px;
+            padding-left: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+        ul {
+            width: 100%;
+            display: flex;
+            padding: 0 15px;
+            flex-wrap: wrap;
+            li {
+                width: 25%;
+                height: 132px;
+                img {
+                    width: 64px;
+                    height: 64px;
+                    margin: 0 auto;
+                    margin-bottom: 12px;
+                    margin-top: 20px;
+                }
+                p {
+                    font-size: 24px;
+                    color: #2E2C2C;
+                    line-height: 34px;
+                }
+            }
+        }
+    }
+}
