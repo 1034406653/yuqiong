@@ -27,11 +27,14 @@ const Information_certificateNo = () =>
 	import('@/components/information/certificateNo')
 const Information_company = () =>
 	import('@/components/information/company')
+	/*员工码*/
+const StaffQrcode = () =>
+	import('@/components/staffQrcode')
 /*员工通道*/
-const Staff_bindPhone = () =>
+/*const Staff_bindPhone = () =>
 	import('@/components/staff/bindPhone')
 const Staff_qrcode = () =>
-	import('@/components/staff/qrcode')
+	import('@/components/staff/qrcode')*/
 
 /*
  * 
@@ -168,24 +171,15 @@ export default new Router({
 				title: "账号解绑"
 			}
 		},
-		/*员工通道*/
+		/*员工码*/
 		{
-			path: '/staff/qrcode',
-			name: 'Staff_qrcode',
-			component: Staff_qrcode,
+			path: '/staffQrcode',
+			name: 'StaffQrcode',
+			component: StaffQrcode,
 			meta: {
-				title: "通信二维码"
+				title: "通行二维码"
 			}
-		},
-		{
-			path: '/staff/bindPhone',
-			name: 'Staff_bindPhone',
-			component: Staff_bindPhone,
-			meta: {
-				title: "绑定手机"
-			}
-		},
-		
+		},				
 		/*
 		 *访客
 		 *

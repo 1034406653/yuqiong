@@ -19,6 +19,8 @@ const state = {
 	needReason:false,
 	needCompany:false,
 	isAdmin:false,
+	employeeCode:"",
+	elevatorVip:false,
 }
 /*触发状态*/
 const mutations = {
@@ -97,6 +99,18 @@ const mutations = {
 			state.isAdmin = false;
 		}	
 		sessionStorage.setItem('isAdmin', isAdmin);
+	},
+	initEmployeeCode(state, employeeCode) {
+		state.employeeCode = employeeCode;
+		sessionStorage.setItem('employeeCode', state.employeeCode);
+	},
+	initElevatorVip(state, elevatorVip) {
+		if(elevatorVip){
+			state.elevatorVip = true;
+		}else{
+			state.elevatorVip = false;
+		}	
+		sessionStorage.setItem('elevatorVip', elevatorVip);
 	},
 }
 for(let key in state) {

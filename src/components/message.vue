@@ -1,6 +1,12 @@
 <template>
 	<div class="message_page">
 		<headerNav @bNavBack="navBack"></headerNav>
+		<ul class="nav_list">
+			<li v-for="(item,index) in navList" :class="{active:item.active}" @click="handle_change_type(index)">
+				<span>{{item.value}}</span>
+				<b v-if='item.active'></b>
+			</li>
+		</ul>
 		<div class="list-box">
 			<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 				<div slot="pulling" class="refresh-top">
@@ -14,22 +20,21 @@
 				</div>
 				<div class="li-box">
 					<van-list v-model="loading" :finished="finished" finished-text="" @load="onLoadBottom">
-					<ul>
-						<li v-for="item in newsList" @click.stop="goDetails(item)">
-							<div class="title">
-								<i :class='{"ibgwhite":item.isRead==1}'></i>
-								<span>{{item.title}}</span>
-								<b>{{item.displayTime}}</b>
-							</div>
-							<div class="text">
-								{{item.content}}
-							</div>
-						</li>
-					</ul>
+						<ul>
+							<li v-for="item in newsList" @click.stop="goDetails(item)">
+								<div class="title">
+									<i :class='{"ibgwhite":item.isRead==1}'></i>
+									<span>{{item.title}}</span>
+									<b>{{item.displayTime}}</b>
+								</div>
+								<div class="text">
+									{{item.content}}
+								</div>
+							</li>
+						</ul>
 					</van-list>
 					<div class="nomore" v-if="nomore">没有更多了</div>
 				</div>
-				
 
 			</van-pull-refresh>
 
@@ -51,8 +56,25 @@
 				isLoading: false,
 				loading: false,
 				finished: false,
+				type: "",
 				pageNumber: 1,
 				newsList: [],
+				navList: [{
+					active: true,
+					value: '全部',
+				}, {
+					active: false,
+					value: '访客',
+				}, {
+					active: false,
+					value: '停车',
+				}, {
+					active: false,
+					value: '梯控',
+				}, {
+					active: false,
+					value: '会议',
+				}, ]
 			}
 		},
 		components: {
@@ -73,8 +95,6 @@
 			},
 			/*loadmore*/
 			onLoadBottom() {
-
-				console.log('chufa')
 				this.finished = true;
 				this.$axios({
 					method: 'post',
@@ -82,6 +102,7 @@
 					data: {
 						openId: this.$openId,
 						pageSize: 10,
+						type:this.type,
 						pageNumber: this.pageNumber,
 					},
 				}).then(res => {
@@ -113,6 +134,7 @@
 					data: {
 						openId: this.$openId,
 						pageSize: 10,
+						type:this.type,
 						pageNumber: this.pageNumber,
 					},
 				}).then(res => {
@@ -157,7 +179,21 @@
 					}
 				})
 			},
-
+			handle_change_type(index){
+				this.navList.forEach((x,i)=>{
+					if(i==index){
+						x.active=true;
+					}else{
+						x.active=false;
+					}
+				})	
+				if(index==0){
+					this.type='';
+				}else{
+					this.type=parseInt(index)-1;
+				}
+				this.initList();
+			}
 		},
 	}
 </script>
@@ -168,15 +204,46 @@
 		height: auto;
 		padding-top: 76px;
 		height: 100%;
+		.nav_list {
+			width: 100%;
+			height: 90px;
+			display: flex;
+			background: #fff;
+			margin-top: 2px;
+			margin-bottom: 10px;
+			li {
+				width: 20%;
+				height: 90px;
+				padding: 0 24px;
+				span {
+					display: block;
+					height: 86px;
+					line-height: 86px;
+					font-size: 32px;
+					font-weight: 500;
+				}
+				b {
+					width: 100%;
+					height: 4px;
+					background: #359EF9;
+					border-radius: 2px;
+					display: block;
+				}
+				&.active {
+					span {
+						color: #359EF9;
+					}
+				}
+			}
+		}
 		.list-box {
 			width: 100%;
 			height: 100%;
 			overflow: scroll;
-			.li-box{
+			.li-box {
 				min-height: 1100px;
 			}
 			.van-list {
-				
 				ul {
 					padding-top: 2px;
 					width: 100%;
