@@ -19,8 +19,10 @@ const state = {
 	needReason:false,
 	needCompany:false,
 	isAdmin:false,
-	employeeCode:"",
-	elevatorVip:false,
+	employeeCode:"",	
+	elevatorVip:false,//公司
+	authElevatorVip:false,//个人
+	haveVipElevator:false,//物业
 }
 /*触发状态*/
 const mutations = {
@@ -111,6 +113,22 @@ const mutations = {
 			state.elevatorVip = false;
 		}	
 		sessionStorage.setItem('elevatorVip', elevatorVip);
+	},
+	initAuthElevatorVip(state, authElevatorVip) {
+		if(authElevatorVip){
+			state.authElevatorVip = true;
+		}else{
+			state.authElevatorVip = false;
+		}	
+		sessionStorage.setItem('authElevatorVip', authElevatorVip);
+	},
+	initHaveVipElevator(state, haveVipElevator) {
+		if(haveVipElevator){
+			state.haveVipElevator = true;
+		}else{
+			state.haveVipElevator = false;
+		}	
+		sessionStorage.setItem('haveVipElevator', haveVipElevator);
 	},
 }
 for(let key in state) {

@@ -1,7 +1,7 @@
 <template>
 	<div class="elevatorStatus">
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div class="elevatorStatus_main">
+		<div :class="[$store.state.elevatorVip?'elevatorStatus_active':'','elevatorStatus_main']" >
 			<div class="header">
 				<img class="adress_icon" src="@/assets/img/elevator/icon_status_adress.png"/>
 				<span>森和广场</span>
@@ -28,6 +28,24 @@
 				</li>				
 			</ul>
 		</div>
+		<ul class="nav_list">
+			<li @click="$router.push('/')">
+				<img src="@/assets/img/elevator/nav_center.png" />
+				<p>个人中心</p>
+			</li>
+			<li @click="$router.push('/elevator/apply')">
+				<img src="@/assets/img/elevator/nav_apply.png" />
+				<p>申请VIP梯</p>
+			</li>
+			<li @click="$router.push('/elevator/record')">
+				<img src="@/assets/img/elevator/nav_record.png" />
+				<p>VIP梯申请记录</p>
+			</li>
+			<li @click="$router.push('/elevator/floor')">
+				<img src="@/assets/img/elevator/nav_floor.png" />
+				<p>我的楼层</p>
+			</li>
+		</ul>
 	</div>
 </template>
 

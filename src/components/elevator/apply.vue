@@ -66,7 +66,7 @@
 				<span>预计费用：</span><b>{{pay}}元</b>
 			</div>			
 		</div>
-		<ColorBtn @handleBtnClick="handle_submit" class='sub_btn'>提交申请</ColorBtn>
+		<ColorBtn @handleBtnClick="handle_submit" class='sub_btn' :btnClassName.sync='btnClassName'>提交申请</ColorBtn>
 	</div>
 </template>
 <script>
@@ -165,7 +165,7 @@
 				},
 				remark:"",
 				pay:5,
-				
+				btnClassName:'colorBtnBlue',
 			}
 		},
 		mounted() {

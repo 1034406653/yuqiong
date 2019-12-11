@@ -83,6 +83,8 @@ const ElevatorRecord = () =>
 	import('@/components/elevator/record')
 const ElevatorStatus = () =>
 	import('@/components/elevator/status')
+const ElevatorFloor = () =>
+	import('@/components/elevator/floor')
 
 Vue.use(Router)
 export default new Router({
@@ -306,6 +308,14 @@ export default new Router({
 			component: ElevatorStatus,
 			meta: {
 				title: "申请VIP梯"
+			}
+		},
+		{
+			path: '/elevator/floor',
+			name: 'ElevatorFloor',
+			component: ElevatorFloor,
+			meta: {
+				title: "我的楼层"
 			}
 		},
 	]
