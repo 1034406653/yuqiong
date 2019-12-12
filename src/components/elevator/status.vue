@@ -1,7 +1,7 @@
 <template>
 	<div class="elevatorStatus">
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div :class="[$store.state.elevatorVip?'elevatorStatus_active':'','elevatorStatus_main']" >
+		<div :class="[$store.state.elevatorVip?'elevatorVip_active':'','elevatorStatus_main']" >
 			<div class="header">
 				<img class="adress_icon" src="@/assets/img/elevator/icon_status_adress.png"/>
 				<span>森和广场</span>
@@ -28,7 +28,7 @@
 				</li>				
 			</ul>
 		</div>
-		<ul class="nav_list">
+		<ul class="nav_list" v-if="$store.state.elevatorVip&&$store.state.haveVipElevator&&$store.state.authElevatorVip">
 			<li @click="$router.push('/')">
 				<img src="@/assets/img/elevator/nav_center.png" />
 				<p>个人中心</p>

@@ -15,7 +15,7 @@
 				<img src="@/assets/img/head_phone.png" />
 				<span v-on:click.stop="$router.push('/bindPhone')">待绑定</span>
 			</div>
-			<div class="qrcode" v-if="$store.state.employeeCode"><img src="@/assets/img/head_qrcode_icon.png" @click="$router.push('/staffQrcode')" /><span>员工码</span></div>
+			<div class="qrcode" v-if="$store.state.employeeCode" @click="$router.push('/staffQrcode')"><img src="@/assets/img/head_qrcode_icon.png"/><span>员工码</span></div>
 			<div class="message" @click="$router.push('/message')">
 				<img src="@/assets/img/head_message_icon.png" class="icon_message" />
 				<van-swipe :autoplay="3000" vertical :show-indicators='false' :touchable='false'>
@@ -55,8 +55,8 @@
 			<div class="title">其他服务</div>
 			<ul>
 				<li @click="$router.push('/elevator/status')"><img src="@/assets/img/nav_elevator_status.png" /><span>电梯状态</span></li>
-				<li v-if="$store.state.elevatorVip" @click="$router.push('/elevator/apply')"><img src="@/assets/img/nav_elevator_apply.png" /><span>申请VIP梯</span></li>
-				<li v-if="$store.state.elevatorVip" @click="$router.push('/elevator/record')"><img src="@/assets/img/nav_elevator_record.png" /><span>VIP梯申请记录</span></li>
+				<li v-if="$store.state.authElevatorVip" @click="handle_nav_elevatorApply"><img src="@/assets/img/nav_elevator_apply.png" /><span>申请VIP梯</span></li>
+				<li v-if="$store.state.authElevatorVip" @click="handle_nav_elevatorRecord"><img src="@/assets/img/nav_elevator_record.png" /><span>VIP梯申请记录</span></li>
 				<li><img src="@/assets/img/nav_meeting_book.png" /><span>会议室预约</span></li>
 			</ul>
 		</div>
@@ -112,12 +112,16 @@
 						this.$store.commit('initBind', bind)
 						let elevatorVip = res.data.data.elevatorVip ? 1 : '';
 						this.$store.commit('initElevatorVip', elevatorVip)
+						let haveVipElevator = res.data.data.haveVipElevator ? 1 : '';
+						this.$store.commit('initHaveVipElevator', haveVipElevator)
+						let authElevatorVip = res.data.data.authElevatorVip ? 1 : '';
+						this.$store.commit('initAuthElevatorVip', authElevatorVip)
 						let userid = res.data.data.id || '';
 						this.$store.commit('initUserid', res.data.data.id);
 						let userPhone = res.data.data.phone || '';
 						this.$store.commit('initUserPhone', userPhone)
 						let company = res.data.data.company || '';
-						this.$store.commit('initCompany', company);						
+						this.$store.commit('initCompany', company);
 						let realName = res.data.data.realName || '';
 						this.$store.commit('initRealName', realName);
 						let certificateNo = res.data.data.certificateNo || '';
@@ -163,6 +167,17 @@
 					console.log(res)
 				});
 			},
+			handle_nav_elevatorRecord() {
+				if(!this.$store.state.elevatorVip) return this.$toast('公司VIP权限未开启，请联系物业开启相应权限');
+				if(!this.$store.state.haveVipElevator) return this.$toast('大楼VIP通道未开启');
+				this.$router.push('/elevator/record');
+				
+			},
+			handle_nav_elevatorApply() {
+				if(!this.$store.state.elevatorVip) return this.$toast('公司VIP权限未开启，请联系物业开启相应权限');
+				/*if(!this.$store.state.haveVipElevator) return this.$toast('大楼VIP通道未开启');*/
+				this.$router.push('/elevator/apply');				
+			}
 		}
 	}
 </script>
