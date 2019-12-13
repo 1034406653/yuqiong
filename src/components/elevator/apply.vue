@@ -12,8 +12,8 @@
 					<img src="@/assets/img/elevator/icon_down.png" v-if="elevatorListStartShow" @click="elevatorListStartShow=false" />
 				</div>
 				<ul>
-					<li v-for='(item,index) in elevatorListStart' :class="[item.classActive?'active':'']" v-if="index<4||elevatorListStartShow" @click="handle_elevatorStart(index)">
-						{{item.valueText}}
+					<li v-for='(item,index) in elevatorListStart' :class="[item.active?'active':'']" v-if="index<4||elevatorListStartShow" @click="handle_elevatorStart(index)">
+						{{item.value}}
 					</li>
 				</ul>
 			</div>
@@ -26,8 +26,8 @@
 					<img src="@/assets/img/elevator/icon_down.png" v-if="elevatorListEndShow" @click="elevatorListEndShow=false" />
 				</div>
 				<ul>
-					<li v-for='(item,index) in elevatorListEnd' :class="[item.classActive?'active':'']" v-if="index<4||elevatorListEndShow" @click="handle_elevatorEnd(index)">
-						{{item.valueText}}
+					<li v-for='(item,index) in elevatorListEnd' :class="[item.active?'active':'']" v-if="index<4||elevatorListEndShow" @click="handle_elevatorEnd(index)">
+						{{item.value}}
 					</li>
 				</ul>
 			</div>
@@ -36,8 +36,8 @@
 					预计使用时长
 				</div>
 				<ul>
-					<li v-for='(item,index) in elevatorListTime' :class="[item.classActive?'active':'']" @click="handle_elevatorTime(index)">
-						{{item.valueText}}
+					<li v-for='(item,index) in elevatorListTime' :class="[item.active?'active':'']" @click="handle_elevatorTime(index)">
+						{{item.value}}
 					</li>
 					<li @click="handle_userDefined" v-show='!userDefined'>自定义</li>
 					<li v-show='userDefined' class="userdefined"><input type="text" v-model="newTime" onkeyup="this.value=this.value.replace(/[^\d^\.]+/g,'')" ref='userDefinedInput' /><span>分钟</span><b @click="handle_userDefined_confirm">确定</b></li>
@@ -57,14 +57,14 @@
 				</div>
 				<div class="input_part">
 					<div class="top">
-						<span class="label">备注：(选填）</span>						
+						<span class="label">备注：(选填）</span>
 					</div>
 					<input type="text" v-model="remark" placeholder="可输入访客姓名和所属单位" />
 				</div>
 			</div>
 			<div class="pay">
 				<span>预计费用：</span><b>{{pay}}元</b>
-			</div>			
+			</div>
 		</div>
 		<ColorBtn @handleBtnClick="handle_submit" class='sub_btn' :btnClassName.sync='btnClassName'>提交申请</ColorBtn>
 	</div>
@@ -81,81 +81,27 @@
 		data() {
 			return {
 				elevatorListStartShow: false,
-				elevatorListStart: [{
-					valueText: '1F',
-					classActive: true,
-				}, {
-					valueText: '2F',
-					classActive: false,
-				}, {
-					valueText: '3F',
-					classActive: false,
-				}, {
-					valueText: '4F',
-					classActive: false,
-				}, {
-					valueText: '5F',
-					classActive: false,
-				}, {
-					valueText: '6F',
-					classActive: false,
-				}, {
-					valueText: '7F',
-					classActive: false,
-				}, {
-					valueText: '8F',
-					classActive: false,
-				}, {
-					valueText: '9F',
-					classActive: false,
-				}],
+				elevatorListStart: [],
 				elevatorListEndShow: false,
-				elevatorListEnd: [{
-					valueText: '1F',
-					classActive: true,
-				}, {
-					valueText: '2F',
-					classActive: false,
-				}, {
-					valueText: '3F',
-					classActive: false,
-				}, {
-					valueText: '4F',
-					classActive: false,
-				}, {
-					valueText: '5F',
-					classActive: false,
-				}, {
-					valueText: '6F',
-					classActive: false,
-				}, {
-					valueText: '7F',
-					classActive: false,
-				}, {
-					valueText: '8F',
-					classActive: false,
-				}, {
-					valueText: '9F',
-					classActive: false,
-				}],
+				elevatorListEnd: [],
 				elevatorListTime: [{
-					valueText: '5分钟',
-					classActive: true,
+					value: '5分钟',
+					active: true,
 				}, {
-					valueText: '10分钟',
-					classActive: false,
+					value: '10分钟',
+					active: false,
 				}, {
-					valueText: '15分钟',
-					classActive: false,
+					value: '15分钟',
+					active: false,
 				}, {
-					valueText: '30分钟',
-					classActive: false,
+					value: '30分钟',
+					active: false,
 				}, {
-					valueText: '90分钟',
-					classActive: false,
+					value: '90分钟',
+					active: false,
 				}, {
-					valueText: '120分钟',
-					classActive: false,
+					value: '120分钟',
+					active: false,
 				}],
 				newTime: "",
 				userDefined: false,
@@ -163,33 +109,63 @@
 					show: false,
 					text: "",
 				},
-				remark:"",
-				pay:5,
-				btnClassName:'colorBtnBlue',
+				remark: "",
+				pay: 5,
+				btnClassName: 'colorBtnBlue',
 			}
 		},
 		mounted() {
-
+			this.init();
 		},
 		methods: {
 			navBack() {
 				this.$router.push('/');
 			},
+			init() {
+				this.$axios({
+					method: 'post',
+					url: 'elevator/myFloor',
+					data: {
+						openId: this.$openId,
+					},
+				}).then(res => {
+					console.log(res)
+					if(res.data.code == 200) {
+						this.defaultFloor = res.data.data.defaultFloor || '';
+						res.data.data.authFloor.forEach((x, i) => {
+							let active = false;							
+							this.elevatorListEnd.push({
+								'value': x,
+								'active': active
+							})
+							this.elevatorListStart.push({
+								'value': x,
+								'active': active
+							})
+						})
+						
+					} else {
+						this.$toast(res.data.msg);
+					}
+				}).catch(res => {
+					console.log(res)
+				});
+			},
 			handle_elevatorStart(index) {
 				this.elevatorListStart.forEach((x, i) => {
 					if(i != index) {
-						x.classActive = false;
+						x.active = false;
 					} else {
-						x.classActive = true;
+						x.active = true;
 					}
 				})
 			},
 			handle_elevatorEnd(index) {
 				this.elevatorListEnd.forEach((x, i) => {
 					if(i != index) {
-						x.classActive = false;
+						x.active = false;
 					} else {
-						x.classActive = true;
+						x.active = true;
 					}
 				})
 			},
@@ -197,9 +173,9 @@
 				this.userDefined = false;
 				this.elevatorListTime.forEach((x, i) => {
 					if(i != index) {
-						x.classActive = false;
+						x.active = false;
 					} else {
-						x.classActive = true;
+						x.active = true;
 					}
 				})
 			},
@@ -215,9 +191,9 @@
 				this.newTime = Number(this.newTime) || '';
 				if(this.newTime && 0 <= this.newTime && this.newTime <= 360) {
 					this.elevatorListTime.forEach((x, i) => {
-						x.classActive = false;
+						x.active = false;
 					})
-					let jsonText = `{"valueText":"${this.newTime}分钟","classActive":true}`;
+					let jsonText = `{"value":"${this.newTime}分钟","active":true}`;
 					this.elevatorListTime.push(JSON.parse(jsonText));
 					this.userDefined = false;
 					this.newTime = '';
@@ -226,8 +202,8 @@
 					this.newTime = '';
 				}
 			},
-			handle_submit(){
-				
+			handle_submit() {
+
 			}
 		}
 	}

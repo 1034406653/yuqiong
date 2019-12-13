@@ -81,13 +81,8 @@
                             &:last-child {
                                 left: 26px;
                             }
-                            &.b1 {
-                                border-left: 12px solid #359EF9;
-                                animation: changeColor1 2s infinite;
-                            }
-                            &.b2 {
-                                border-left: 12px solid #9ACEFC;
-                                animation: changeColor2 2s infinite;
+                            &.b3 {
+                                border-left: 12px solid #97A1AF;
                             }
                         }
                     }
@@ -95,11 +90,11 @@
                 .top_right {
                     width: 120px;
                     height: 40px;
-                    background: #DDFBFF;
+                    background: #EAEAEA;
+                    color: #272727;
                     border-radius: 6px;
                     margin-top: 23px;
                     margin-left: 70px;
-                    color: #4DA5F7;
                     font-size: 26px;
                     line-height: 40px;
                 }
@@ -134,7 +129,7 @@
                         font-weight: 700;
                         display: flex;
                         justify-content: center;
-                        i{
+                        i {
                             display: block;
                             padding: 0 2px;
                         }
@@ -142,27 +137,58 @@
                 }
             }
             .bottom {
-                width: 100%;
-                .btn_box {
+                .btn {
                     width: 100%;
-                    height: auto;
-                    display: flex;
-                    position: relative;
-                    span {
-                        width: 50%;
-                        height: 84px;
-                        line-height: 84px;
-                        font-size: 32px;
-                        cursor: pointer;
+                    height: 84px;
+                    line-height: 84px;
+                    font-size: 32px;
+                    cursor: pointer;
+                }
+            }
+            &.active {
+                .top {
+                    .top_center {
+                        P {
+                            b {
+                                &.b1 {
+                                    border-left: 12px solid #359EF9;
+                                    animation: changeColor1 2s infinite;
+                                }
+                                &.b2 {
+                                    border-left: 12px solid #9ACEFC;
+                                    animation: changeColor2 2s infinite;
+                                }
+                            }
+                        }
                     }
-                    i {
-                        position: absolute;
-                        width: 4px;
-                        height: 48px;
-                        left: 50%;
-                        margin-left: -2px;
-                        top: 18px;
-                        background: #F2F2F2;
+                    .top_right {
+                        background: #DDFBFF;
+                        color: #4DA5F7;
+                    }
+                }
+                .bottom {
+                    width: 100%;
+                    .btn_box {
+                        width: 100%;
+                        height: auto;
+                        display: flex;
+                        position: relative;
+                        span {
+                            width: 50%;
+                            height: 84px;
+                            line-height: 84px;
+                            font-size: 32px;
+                            cursor: pointer;
+                        }
+                        i {
+                            position: absolute;
+                            width: 4px;
+                            height: 48px;
+                            left: 50%;
+                            margin-left: -2px;
+                            top: 18px;
+                            background: #F2F2F2;
+                        }
                     }
                 }
             }

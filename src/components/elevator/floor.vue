@@ -3,7 +3,7 @@
 		<headerNav @bNavBack="navBack"></headerNav>
 		<div class="elevatorFloor_main">
 			<div class="top">
-				当前默认楼层：F12
+				当前默认楼层：{{defaultFloor}}
 			</div>
 			<div class="center">
 				<p>我的权限楼层：</p>
@@ -30,22 +30,8 @@
 		},
 		data() {
 			return {
-				floorList: [{
-					value: 1,
-					active: true
-				}, {
-					value: 4,
-					active: false
-				}, {
-					value: 7,
-					active: false
-				}, {
-					value: 10,
-					active: false
-				}, {
-					value: 10,
-					active: false
-				}, ],
+				defaultFloor:'',
+				floorList: [],
 				btnClassName: 'colorBtnBlue',
 			}
 		},
@@ -63,6 +49,14 @@
 				}).then(res => {
 					console.log(res)
 					if(res.data.code == 200) {
+						this.defaultFloor=res.data.data.defaultFloor || '';
+						res.data.data.authFloor.forEach((x,i)=>{
+							let active=false;
+							if(x==this.defaultFloor){
+								active=true;
+							}
+							this.floorList.push({'value':x,'active':active})
+						})
 						
 					} else {
 						this.$toast(res.data.msg);
