@@ -5,27 +5,32 @@
 			<input type="text" placeholder="请输入您的姓名" v-model="realName" />
 		</div>
 		<div class="bottom">
-			<div class="colorBtnWhite" @click="$router.push('/information')">
-				取消
+			<div class="btn">
+				<ColorBtn @click="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
 			</div>
-			<div class="colorBtnBlue" @click="changeRealName">
-				确定
-			</div>
+			<div class="btn">
+				<ColorBtn @click="changeCertificateNo" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>	
+			</div>	
 		</div>
 	</div>
 </template>
 
 <script>
 	import HeaderNav from '../common/headerNav'
+	import ColorBtn from '../common/colorBtn'
 	export default {
 		name: 'informatin_username',
 		data() {
 			return {
 				realName: "",
+				/*按钮*/
+				btnClassNameWhite:'colorBtnWhite',
+				btnClassNameBlue:'colorBtnBlue',
 			}
 		},
 		components: {
 			HeaderNav,
+			ColorBtn
 		},
 		mounted() {
 			this.realName = this.$store.state.realName
@@ -48,16 +53,10 @@
 							this.$router.push('/information');
 							this.$store.commit('initRealName', this.realName)
 						} else {
-							MessageBox({
-								title: "",
-								message: res.data.data.msg,
-							});
+							this.$toast(res.data.data.msg)								
 						}
 					} else {
-						MessageBox({
-							title: "",
-							message: res.data.msg,
-						});
+						this.$toast(res.data.msg)	
 					}
 
 				}).catch(res => {

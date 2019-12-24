@@ -70,17 +70,15 @@
 		},
 		mounted() {
 			let activeIndex = this.$route.params.id || ''
-			if(activeIndex) {
-				this.handleNavClick(activeIndex)
-			}
+			this.handleNavClick(activeIndex)
 		},
 		methods: {
 			navBack() {
 				this.$router.push('/');
 			},
-			initList() {
-				this.nomore = false;
+			initList() {				
 				this.finished = true;
+				this.loading = false;
 				this.recordList = [];
 				this.pageNumber = 1;
 				this.$toast.loading({
@@ -88,8 +86,7 @@
 					message: '加载中...',
 					forbidClick: true,
 					loadingType: 'spinner'
-				});
-				console.log(this.status);
+				});			
 				this.$axios({
 					method: 'post',
 					url: '/guest/appointment/record',
@@ -118,8 +115,10 @@
 					}
 				}).catch(res => {
 					this.loading = false;
-					this.finished = false;
+					this.finished = true;
+					this.$toast('系统出错了');
 					this.$toast.clear();
+					
 				});
 			},
 			onLoadBottom() {
@@ -134,8 +133,7 @@
 						index: 1,
 						status: this.status,
 					},
-				}).then(res => {
-					this.$toast.clear();
+				}).then(res => {					
 					if(res.data.code == 200) {						
 						this.pageNumber += 1;
 						if(res.data.data.list.length < 10) {
@@ -152,11 +150,11 @@
 					}
 				}).catch(res => {
 					this.loading=false;
-					this.finished = false;
-					this.$toast.clear();
+					this.finished = true;										
+					this.$toast('系统出错了');
 				});
 			},
-			handleNavClick(index) {
+			handleNavClick(index){
 				this.navList.forEach((x, i) => {
 					if(i == index) {
 						this.navList[i].active = true;
@@ -164,8 +162,8 @@
 					} else {
 						this.navList[i].active = false;
 					}
-				})
-				console.log(this.status);
+				})		
+				this.nomore = false;
 				this.initList();
 			},
 			/*显示二维码*/

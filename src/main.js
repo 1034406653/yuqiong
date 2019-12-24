@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
 				url: '/wx/api/login',
 			}).then(res => {
 				let formPath = '1'
-				// let formPath = '0'				
+				 //let formPath = '0'				
 				location.href = res.data.data.url.split('&state')[0] + "&state=" + formPath;
 			}).catch(res => {
 				console.log(res)

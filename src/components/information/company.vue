@@ -5,27 +5,32 @@
 			<input type="text" placeholder="请输入您的单位" v-model="company" />
 		</div>
 		<div class="bottom">
-			<div class="colorBtnWhite" @click="$router.push('/information')">
-				取消
+			<div class="btn">
+				<ColorBtn @click="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
 			</div>
-			<div class="colorBtnBlue" @click="changeCompany">
-				确定
-			</div>
+			<div class="btn">
+				<ColorBtn @click="changeCertificateNo" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>	
+			</div>				
 		</div>
 	</div>
 </template>
 
 <script>
 	import HeaderNav from '../common/headerNav'
+	import ColorBtn from '../common/colorBtn'
 	export default {
 		name: 'Informatin_idnumber',
 		data() {
 			return {
 				company: "",
+				/*按钮*/
+				btnClassNameWhite:'colorBtnWhite',
+				btnClassNameBlue:'colorBtnBlue',
 			}
 		},
 		components: {
 			HeaderNav,
+			ColorBtn
 		},
 		mounted() {
 			this.company = this.$store.state.company;
@@ -48,16 +53,10 @@
 							this.$router.push('/information');
 							this.$store.commit('initCompany', this.company)
 						} else {
-							MessageBox({
-								title: "",
-								message: res.data.data.msg,
-							});
+							this.$toast(res.data.data.msg)							
 						}
 					} else {
-						MessageBox({
-							title: "",
-							message: res.data.msg,
-						});
+						this.$toast(res.data.msg)
 					}
 				}).catch(res => {
 					console.log(res)

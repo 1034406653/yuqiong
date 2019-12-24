@@ -93,14 +93,14 @@
 					console.log(res)
 					if(res.data.code == 200) {
 						if(!res.data.data.id) {
-							this.$axios({
+							/*this.$axios({
 								method: 'get',
 								url: '/wx/api/login',
 							}).then(res => {
 								location.href = res.data.data.url.split('&state')[0] + '&state=' + '0';
 							}).catch(res => {
 								console.log(res)
-							});
+							});*/
 						}
 						let isAdmin = res.data.data.admin ? 1 : '';
 						this.$store.commit('initIsAdmin', isAdmin);

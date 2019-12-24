@@ -115,16 +115,11 @@
         width: 708px;
         height: 90px;
         overflow: hidden;
+        display: flex;      
+        justify-content: space-around;
         margin: 120px auto;
-        .colorBtnWhite{
-            width: 340px;
-            float: left;
-            margin-right: 27px;
-        }
-        .colorBtnBlue{
-            width: 340px;
-            float: left;
-           
-        }
+        .btn{
+             width: 300px;
+        }        
     }
 }

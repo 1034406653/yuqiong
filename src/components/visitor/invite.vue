@@ -253,7 +253,6 @@
 						openId: this.$openId,
 					},
 				}).then(res => {
-					console.log(res);
 					if(res.data.code == 200) {
 						this.$store.commit('initNeedReason', res.data.data.needReason)
 						this.$store.commit('initNeedCompany', res.data.data.needCompany)

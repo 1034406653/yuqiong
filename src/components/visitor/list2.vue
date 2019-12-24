@@ -184,7 +184,6 @@
 			handle_guest_show() {
 				this.typeList_guest.en.forEach((x, i) => {
 					if(this.status == x) {
-						console.log(i)
 						this.typeList_guest_index = i;
 					}
 				})
@@ -196,12 +195,10 @@
 				this.typeShow_guest = false;
 				this.initList();
 			},
-
 			/*选择类型,我的访问*/
 			handle_visit_show() {
 				this.typeList_visit.en.forEach((x, i) => {
 					if(this.status == x) {
-						console.log(i)
 						this.typeList_visit_index = i;
 					}
 				})
@@ -265,9 +262,9 @@
 						this.$toast(res.data.msg);
 					}
 				}).catch(res => {
-					this.finished = false;
+					this.finished = true;					
 					this.$toast.clear();
-					console.log(res)
+					this.$toast('系统出错了');
 				});
 			},
 			onLoadBottom() {
@@ -299,8 +296,9 @@
 					}
 				}).catch(res => {
 					this.loading=false;
-					this.finished = false;
-					console.log(res)
+					this.finished = true;
+					this.$toast('系统出错了');
+					
 				});
 			},
 			/*改期*/

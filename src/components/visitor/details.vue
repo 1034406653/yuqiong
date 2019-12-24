@@ -1,7 +1,7 @@
 <template>
 	<div class="details_page book_page" ref='details_page'>
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div v-if="detailsData.status=='待访问'|| detailsData.status=='访问中'">
+		<div v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity=='0'|| detailsData.status=='访问中'&&detailsData.currentRequestIdentity=='0'">
 			<div class="qrcode_title">
 				通行二维码
 			</div>
@@ -320,7 +320,6 @@
 		methods: {
 			init() {
 				if(this.$route.query.id) {
-
 					this.id = parseInt(this.$route.query.id);
 					this.$axios({
 						method: 'post',
@@ -330,6 +329,7 @@
 							id: this.id,
 						},
 					}).then(res => {
+						console.log(res)
 						if(res.data.code == 200) {
 							document.title = res.data.data.status;
 							console.log(res.data.data.status)
@@ -348,7 +348,6 @@
 							iframe.addEventListener('load', iframeCallback)
 							document.body.appendChild(iframe)
 							this.detailsData = res.data.data;
-
 							res.data.data.followList.forEach((x, i) => {
 								this.$axios({
 									method: 'post',
@@ -434,7 +433,6 @@
 					this.$router.go(-1)
 				}
 			},
-
 			handleChangeQrcode(index) {
 				let dom = this.$refs.linkInput[index];
 				
@@ -453,7 +451,6 @@
 			    });
 				this.$toast('复制成功');
 			},
-
 			/*随访人*/
 			goDetails_followList() {
 				this.$router.push({
