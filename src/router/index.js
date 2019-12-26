@@ -30,11 +30,6 @@ const Information_company = () =>
 	/*员工码*/
 const StaffQrcode = () =>
 	import('@/components/staffQrcode')
-/*员工通道*/
-/*const Staff_bindPhone = () =>
-	import('@/components/staff/bindPhone')
-const Staff_qrcode = () =>
-	import('@/components/staff/qrcode')*/
 
 /*
  * 
@@ -77,14 +72,27 @@ const VisitorCopyto = () =>
  * 
  */
 	
-const ElevatorApply = () =>
-	import('@/components/elevator/apply')
+const ElevatorBook = () =>
+	import('@/components/elevator/book')
 const ElevatorRecord = () =>
 	import('@/components/elevator/record')
 const ElevatorStatus = () =>
 	import('@/components/elevator/status')
 const ElevatorFloor = () =>
 	import('@/components/elevator/floor')
+/*
+ * 
+会议
+ * 
+ */
+	
+const MeetingRoomList = () =>
+	import('@/components/meeting/roomList')
+const MeetingMy = () =>
+	import('@/components/meeting/my')
+const MeetingBook = () =>
+	import('@/components/meeting/book')
+
 
 Vue.use(Router)
 export default new Router({
@@ -287,9 +295,9 @@ export default new Router({
 		 *
 		 */
 		{
-			path: '/elevator/apply',
-			name: 'ElevatorApply',
-			component: ElevatorApply,
+			path: '/elevator/book',
+			name: 'ElevatorBook',
+			component: ElevatorBook,
 			meta: {
 				title: "申请VIP梯"
 			}
@@ -316,6 +324,34 @@ export default new Router({
 			component: ElevatorFloor,
 			meta: {
 				title: "我的楼层"
+			}
+		},
+		/*
+		 *会议
+		 *
+		 */
+		{
+			path: '/meeting/roomList',
+			name: 'MeetingRoomList',
+			component: MeetingRoomList,
+			meta: {
+				title: "会议室"
+			}
+		},
+		{
+			path: '/meeting/my',
+			name: 'MeetingMy',
+			component: MeetingMy,
+			meta: {
+				title: "我的会议"
+			}
+		},
+		{
+			path: '/meeting/book',
+			name: 'MeetingBook',
+			component: MeetingBook,
+			meta: {
+				title: "会议室预定"
 			}
 		},
 	]

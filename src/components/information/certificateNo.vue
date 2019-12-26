@@ -6,10 +6,10 @@
 		</div>
 		<div class="bottom">
 			<div class="btn">
-				<ColorBtn @click="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
+				<ColorBtn @handleBtnClick="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
 			</div>
 			<div class="btn">
-				<ColorBtn @click="changeCertificateNo" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>
+				<ColorBtn @handleBtnClick="changeCertificateNo" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>
 			</div>
 		</div>
 	</div>
@@ -40,6 +40,7 @@
 				this.$router.push('/information');
 			},
 			changeCertificateNo() {
+				console.log(0)
 				this.certificateNo = allTrim(this.certificateNo);
 				if(this.certificateNo && this.certificateNo.length != 18) {
 					this.$toast('身份证格式不正确')

@@ -6,10 +6,10 @@
 		</div>
 		<div class="bottom">
 			<div class="btn">
-				<ColorBtn @click="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
+				<ColorBtn @handleBtnClick="$router.push('/information')" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
 			</div>
 			<div class="btn">
-				<ColorBtn @click="changeCertificateNo" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>	
+				<ColorBtn @handleBtnClick="changeRealName" :btnClassName.sync='btnClassNameBlue'>确定</ColorBtn>	
 			</div>	
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 <template>
-	<div class="elevatorApply">
+	<div class="elevatorBook">
 		<headerNav @bNavBack="navBack"></headerNav>
 		<div class="elevatorStatus_main">
 			<div class="paddingTop"></div>
@@ -210,5 +210,5 @@
 </script>
 
 <style lang="scss">
-	@import "../../assets/scss/elevatorApply";
+	@import "../../assets/scss/elevatorBook";
 </style>

@@ -33,8 +33,8 @@
 				<img src="@/assets/img/elevator/nav_center.png" />
 				<p>个人中心</p>
 			</li>
-			<li @click="$router.push('/elevator/apply')">
-				<img src="@/assets/img/elevator/nav_apply.png" />
+			<li @click="$router.push('/elevator/book')">
+				<img src="@/assets/img/elevator/nav_book.png" />
 				<p>申请VIP梯</p>
 			</li>
 			<li @click="$router.push('/elevator/record')">

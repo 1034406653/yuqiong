@@ -13,7 +13,7 @@ const state = {
 	bind: false,
 	userid: '',
 	nickName:"",
-	headImg:require('@/assets/img/public/head_portrait.png'),
+	headImg:require('@/assets/img/head_portrait.png'),
 	book_followList:[],	
 	needIdNumber:false,
 	needReason:false,

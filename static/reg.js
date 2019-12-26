@@ -11,6 +11,17 @@ function checktime(i) {
 	return i;
 }
 
+function addDate(date, days) {
+	if(days == undefined || days == '') {
+		days = 0;
+	}
+	var newDate = new Date(date);
+	newDate.setDate(newDate.getDate() + days);
+	let year = newDate.getYear() + 1900;
+	let month = newDate.getMonth() + 1;
+	let day = newDate.getDate();
+	return year + '-' + checktime(month) + '-' + checktime(day);
+}
 
 function trim(str) {
 	return str.replace(/^(\s|\xA0)+|(\s|\xA0)+$/g, '');

@@ -55,9 +55,10 @@
 			<div class="title">其他服务</div>
 			<ul>
 				<li @click="$router.push('/elevator/status')"><img src="@/assets/img/nav_elevator_status.png" /><span>电梯状态</span></li>
-				<li v-if="$store.state.authElevatorVip" @click="handle_nav_elevatorApply"><img src="@/assets/img/nav_elevator_apply.png" /><span>申请VIP梯</span></li>
+				<li v-if="$store.state.authElevatorVip" @click="handle_nav_elevatorBook"><img src="@/assets/img/nav_elevator_book.png" /><span>申请VIP梯</span></li>
 				<li v-if="$store.state.authElevatorVip" @click="handle_nav_elevatorRecord"><img src="@/assets/img/nav_elevator_record.png" /><span>VIP梯申请记录</span></li>
-				<li><img src="@/assets/img/nav_meeting_book.png" /><span>会议室预约</span></li>
+				<li><img src="@/assets/img/nav_meeting_roomList.png" @click="handle_nav_meetingRoomList"/><span>会议室预约</span></li>
+				<li><img src="@/assets/img/nav_meeting_my.png" @click="handle_nav_meetingMy"/><span>我的会议</span></li>
 			</ul>
 		</div>
 	</div>
@@ -173,11 +174,17 @@
 				this.$router.push('/elevator/record');
 				
 			},
-			handle_nav_elevatorApply() {
+			handle_nav_elevatorBook() {
 				if(!this.$store.state.elevatorVip) return this.$toast('公司VIP权限未开启，请联系物业开启相应权限');
-				/*if(!this.$store.state.haveVipElevator) return this.$toast('大楼VIP通道未开启');*/
-				this.$router.push('/elevator/apply');				
-			}
+				if(!this.$store.state.haveVipElevator) return this.$toast('大楼VIP通道未开启');
+				this.$router.push('/elevator/book');				
+			},
+			handle_nav_meetingRoomList(){
+				this.$router.push('/meeting/roomList');	
+			},
+			handle_nav_meetingMy(){
+				
+			},
 		}
 	}
 </script>

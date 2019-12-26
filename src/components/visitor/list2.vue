@@ -1,5 +1,5 @@
 <template>
-	<div class="listPage listPage2">
+	<div class="listPage visitorListPage2">
 		<headerNav @bNavBack="navBack"></headerNav>
 		<div class="header2">
 			<ul>
@@ -262,7 +262,7 @@
 						this.$toast(res.data.msg);
 					}
 				}).catch(res => {
-					this.finished = true;					
+					this.finished = true;
 					this.$toast.clear();
 					this.$toast('系统出错了');
 				});
@@ -281,12 +281,12 @@
 					},
 				}).then(res => {
 					if(res.data.code == 200) {
-						this.loading=false;
+						this.loading = false;
 						this.pageNumber += 1;
 						if(res.data.data.list.length < 10) {
 							this.finished = true;
 							this.nomore = true;
-						} else {							
+						} else {
 							this.nomore = false;
 							this.finished = false;
 						}
@@ -295,10 +295,10 @@
 						this.$toast(res.data.msg);
 					}
 				}).catch(res => {
-					this.loading=false;
+					this.loading = false;
 					this.finished = true;
 					this.$toast('系统出错了');
-					
+
 				});
 			},
 			/*改期*/
@@ -326,31 +326,32 @@
 <style lang="scss">
 	@import "../../assets/scss/visitorCenter";
 	@import "../../assets/scss/visitorList";
-	.listPage2 .header2 ul li {
-		float: left;
-		width: 25%;
-		padding-top: 0.16rem;
-	}
-	
-	.select_box {
-		width: 142px;
-		height: 50px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 10px;
-		margin: 46px 0 0 48px;
-		position: relative;
-		font-size: 28px;
-		p {
-			width: 116px;
-			line-height: 50px;
+	.visitorListPage2 {
+		.header2 ul li {
+			float: left;
+			width: 25%;
+			padding-top: 0.16rem;
 		}
-		img {
-			width: 16px;
-			height: 16px;
-			position: absolute;
-			right: 10px;
-			top: 16px;
-			right: 20px;
+		.select_box {
+			width: 142px;
+			height: 50px;
+			background: rgba(255, 255, 255, 1);
+			border-radius: 10px;
+			margin: 46px 0 0 48px;
+			position: relative;
+			font-size: 28px;
+			p {
+				width: 116px;
+				line-height: 50px;
+			}
+			img {
+				width: 16px;
+				height: 16px;
+				position: absolute;
+				right: 10px;
+				top: 16px;
+				right: 20px;
+			}
 		}
 	}
 </style>
