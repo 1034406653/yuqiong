@@ -27,7 +27,7 @@ const Information_certificateNo = () =>
 	import('@/components/information/certificateNo')
 const Information_company = () =>
 	import('@/components/information/company')
-	/*员工码*/
+/*员工码*/
 const StaffQrcode = () =>
 	import('@/components/staffQrcode')
 
@@ -62,7 +62,7 @@ const VisitorInvite = () =>
 	import('@/components/visitor/invite')
 const VisitorInvite_followList = () =>
 	import('@/components/visitor/invite_followList')
-/*抄送*/	
+/*抄送*/
 const VisitorCopyto = () =>
 	import('@/components/visitor/copyto')
 
@@ -71,7 +71,7 @@ const VisitorCopyto = () =>
  梯控
  * 
  */
-	
+
 const ElevatorBook = () =>
 	import('@/components/elevator/book')
 const ElevatorRecord = () =>
@@ -85,14 +85,15 @@ const ElevatorFloor = () =>
 会议
  * 
  */
-	
+
 const MeetingRoomList = () =>
 	import('@/components/meeting/roomList')
+const MeetingRoomDetails = () =>
+	import('@/components/meeting/roomDetails')
 const MeetingMy = () =>
 	import('@/components/meeting/my')
 const MeetingBook = () =>
 	import('@/components/meeting/book')
-
 
 Vue.use(Router)
 export default new Router({
@@ -189,7 +190,7 @@ export default new Router({
 			meta: {
 				title: "通行二维码"
 			}
-		},				
+		},
 		/*
 		 *访客
 		 *
@@ -225,7 +226,7 @@ export default new Router({
 			meta: {
 				title: "进出次数"
 			}
-		},	
+		},
 		{
 			path: '/visitor/list',
 			name: 'VisitorList',
@@ -336,6 +337,14 @@ export default new Router({
 			component: MeetingRoomList,
 			meta: {
 				title: "会议室"
+			}
+		},
+		{
+			path: '/meeting/roomDetails',
+			name: 'MeetingRoomDetails',
+			component: MeetingRoomDetails,
+			meta: {
+				title: "会议室详情"
 			}
 		},
 		{

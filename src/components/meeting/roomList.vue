@@ -43,7 +43,7 @@
 						<div class="title">
 							会议室地址
 						</div>
-						<input type="text" class="roomNumber" placeholder="请输入会议室门牌号" v-model="search" />
+						<input type="text" class="roomNumber" placeholder="请输入会议室门牌号" v-model="address" />
 					</div>
 					<div class="btn_box">
 						<div class="reset" @click="handle_reset">
@@ -58,7 +58,7 @@
 			<div class="room_box">
 				<van-list v-model="loading" :finished="finished" finished-text="" @load="onLoadBottom">
 					<ul>
-						<li v-for="item in roomList">
+						<li v-for="item in roomList" @click="handle_nav_detail(item)">
 							<img :src="item.photo" class="room_pic" />
 							<div class="room_information">
 								<div class="information_left">
@@ -131,12 +131,12 @@
 					active: false,
 					value: '100~1000',
 				}],
-				search: '',
+				address: '',
 				day: '',
 				hour: '',
 				pSelect: {
 					openId: '',
-					search: '',
+					address: '',
 					day: '',
 					hour: '0',
 					number: '0',
@@ -335,13 +335,15 @@
 						x.active = false
 					}
 				})
-				this.search = '';
+				this.address = '';
 				this.pSelect = {
 					openId: this.$openId,
-					search: '',
+					address: '',
 					day: '',
 					hour: '0',
 					number: '0',
+					pageSize: '3',
+					pageNumber: 1,
 				};
 				this.day = '';
 				this.hour = '';
@@ -350,9 +352,9 @@
 				}, 50)
 			},
 			handle_search() {
-				this.pSelect.search = this.search;
+				this.pSelect.address = this.address;
 				this.pSelect.day = this.day.text2 || '';
-				this.pSelect.hour = this.hour.text2 || 0;
+				this.pSelect.hour = this.hour.text2 || '0';
 				this.peopleList.forEach((x, i) => {
 					if(x.active) {
 						this.pSelect.number = x.value;
@@ -360,6 +362,16 @@
 				})
 				this.initList();
 				this.selectContentShow=false;
+			},
+			handle_nav_detail(item){
+				let meetingRoomlistJson = {};
+				meetingRoomlistJson.id = item.id;
+				if(this.day){
+					meetingRoomlistJson.day=this.day
+				}				
+				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);				
+				sessionStorage.setItem("meetingRoomlist",meetingRoomlistStr);
+				this.$router.push("/meeting/roomDetails")
 			},
 			handle_nav_book(item){
 				let meetingRoomlistJson = {};
@@ -370,7 +382,8 @@
 				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);				
 				sessionStorage.setItem("meetingRoomlist",meetingRoomlistStr);
 				this.$router.push("/meeting/book")
-			}
+			},
+			
 		}
 	}
 </script>

@@ -1,0 +1,165 @@
+            .meetingRoomDetails {
+                width: 100%;
+                height: 100%;
+                padding-top: 76px;
+                color: #363636;
+                box-sizing: border-box;
+                .meetingRoomDetails_main {
+                    width: 100%;
+                    height: auto;
+                    background: #fff;
+                    padding-top: 20px;
+                    .room_information {
+                        padding: 0 30px;
+                        margin-bottom: 10px;
+                        .pic {
+                            display: block;
+                            width: 100%;
+                            height: auto;
+                            margin: 0 auto;
+                        }
+                        .top {
+                            width: 100%;
+                            height: auto;
+                            display: flex;
+                            .left {
+                                width: 50%;
+                                text-align: left;
+                                .p1 {
+                                    font-size: 32px;
+                                    font-weight: 600;
+                                    line-height: 44px;
+                                    margin-top: 10px;
+                                }
+                                .p2 {
+                                    font-size: 24px;
+                                    color: #9D9D9D;
+                                    line-height: 34px;
+                                    margin-top: 4px;
+                                }
+                            }
+                            .right {
+                                width: 50%;
+                                text-align: right;
+                                font-weight: 600;
+                                font-size: 32px;
+                                line-height: 44px;
+                                margin-top: 30px;
+                            }
+                        }
+                        .assort {
+                            width: 100%;
+                            display: flex;
+                            flex-wrap: wrap;
+                            flex-direction: row;
+                            padding-top: 12px;
+                            li {
+                                display: block;
+                                padding: 0 10px;
+                                height: 40px;
+                                background: rgba(242, 242, 244, 1);
+                                border-radius: 4px;
+                                color: #5A5A5A;
+                                line-height: 40px;
+                                margin: 0 10px 10px 0;
+                            }
+                        }
+                    }
+                    .book_information {
+                        width: 100%;
+                        height: auto;
+                        padding: 0 30px;
+                        padding-top: 30px;
+                        background: #fff;
+                        .title {
+                            text-align: left;
+                            font-size: 32px;
+                            font-weight: 600;
+                            line-height: 44px;
+                            padding-bottom: 30px;
+                        }
+                        .select_date {
+                            width: 100%;
+                            height: 100px;
+                            display: flex;
+                            .select_date_list {
+                                width: calc( 100% - 70px);
+                                height: 100px;
+                                overflow: hidden;
+                            }
+                            ul {
+                                width: auto;
+                                height: 100px;
+                                display: flex;
+                                overflow-x: auto;
+                                li {
+                                    display: block;
+                                    padding: 0 20px;
+                                    height: 100px;
+                                    background: #fff;
+                                    border-radius: 4px;
+                                    border: 2px solid #F2F2F4;
+                                    line-height: 96px;
+                                    color: #9d9d9d;
+                                    padding-top: 16px;
+                                    margin-right: 25px;
+                                    p {
+                                        line-height: 34px;
+                                    }
+                                    &.active {
+                                        background: #DFF0FF;
+                                        border: 2px solid #359EF9;
+                                        p {
+                                            color: #359EF9;
+                                        }
+                                    }
+                                }
+                            }
+                            img {
+                                width: 40px;
+                                height: 42px;
+                                margin-left: 30px;
+                                margin-top: 30px;
+                            }
+                        }
+                    }
+                    .room_status {
+                        width: 100%;
+                        height: auto;
+                        .time_line {
+                            width: 100%;
+                            height: auto;
+                            .bg_box {
+                                width: 100%;
+                                height: 80px;
+                                overflow-x: auto;
+                                .bg {
+                                    width: auto;
+                                    height: 80px;
+                                    background: #F8F8F8;
+                                }
+                            }
+                            .time_list {
+                                width: 100%;
+                                height: 58px;
+                                overflow: hidden;
+                            }
+                            ul {
+                                width: auto;
+                                height: 50px;
+                                display: flex;
+                                overflow-x: auto;
+                                li {
+                                    display: block;
+                                    width: 100px;
+                                    text-align: left;
+                                    height: 50px;
+                                    line-height: 50px;
+                                    padding-right: 50px;
+                                    color: #9d9d9d;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
