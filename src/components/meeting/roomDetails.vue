@@ -26,9 +26,7 @@
 					<div class="select_date_list">
 						<ul ref='dateList'>
 							<li :class="[item.active?'active':'','clearfloat']" v-for="item in dateSelectList" ref='dateItem' @click="handle_dateSelect_change(item.id)">
-								<p v-if="item.id==0">今天</p>
-								<p v-else-if="item.id==1">明天</p>
-								<p v-else>{{item.text2}}</p>
+								<p>{{item.text2}}</p>
 								<p>{{item.text3}}</p>
 							</li>
 						</ul>
@@ -37,30 +35,33 @@
 				</div>
 				<div class="room_status">
 					<div class="time_line">
-						<div class="bg_box">
-							<div class="bg">
-
-							</div>
-						</div>
-						<div class="time_list">
-							<ul>
-								<li v-for="item in status.time">{{item.hour}}:{{item.minute}}</li>
-							</ul>
-						</div>
-
+						<ul>
+							<li v-for="item in status" v-if='item.hour<12'>
+								<div class="bg">
+									<div class="book_bg" v-if='item.status==0'></div>
+									<div class="ing_bg" v-if='item.status==1'></div>
+								</div>
+								<div class="time" v-if="item.minute=='00'">{{item.hour}}:{{item.minute}}</div>
+							</li>
+						</ul>
 					</div>
 					<div class="time_line">
-						<div class="bg_box">
-							<div class="bg">
-
-							</div>
-						</div>
-						<ul class="time_list">
-							<li></li>
+						<ul>
+							<li v-for="item in status" v-if='item.hour>=12'>
+								<div class="bg">
+									<div class="book_bg" v-if='item.status==0'></div>
+									<div class="ing_bg" v-if='item.status==1'></div>
+								</div>
+								<div class="time" v-if="item.minute=='00'">{{item.hour}}:{{item.minute}}</div>
+							</li>
 						</ul>
 					</div>
 				</div>
 			</div>
+
+		</div>
+		<div class="btn_box">
+			<ColorBtn @handleBtnClick="handle_nav_book()" :btnClassName.sync='btnClassName'>立即预订</ColorBtn>
 		</div>
 		<div v-if="dateSelectShow" @touchmove.prevent>
 			<van-popup v-model="dateSelectShow" position="bottom">
@@ -72,6 +73,7 @@
 
 <script>
 	import HeaderNav from '../common/headerNav'
+	import ColorBtn from '../common/colorBtn'
 	import Vue from 'vue';
 	import { Popup, Picker } from 'vant';
 	Vue.use(Popup);
@@ -80,27 +82,31 @@
 		name: 'MeetingRoomDetails',
 		data() {
 			return {
+				/*按钮*/
+				btnClassName: "colorBtnBlue",
 				room: {},
+				selectDay:'',
 				assort: [],
 				dateSelectShow: false,
 				dateIndex: 0,
 				dateSelectList: [],
 				startTime: '00:00',
 				enTime: '24:00',
-				status: {
-					time: [],
-				}
+				status: [],
 			}
 		},
 		components: {
 			HeaderNav,
+			ColorBtn
 		},
 		created() {
 			if(sessionStorage.getItem("meetingRoomlist")) {
 				let ronterJson = JSON.parse(sessionStorage.getItem("meetingRoomlist"));
 				this.room.id = ronterJson.id;
-				this.room.day = ronterJson.day || '';
-				this.init();
+				if(ronterJson.day) {
+					this.selectDay = ronterJson.day;
+				}
+				this.init(this.selectDay);
 			} else {
 				this.$rounter.push('/meeting/roomList')
 			}
@@ -109,27 +115,28 @@
 			navBack() {
 				this.$router.push('/');
 			},
-			init() {
+			init(day) {
 				/*会议室信息*/
 				this.$axios({
 					method: 'post',
 					url: 'meeting/detail',
 					data: {
 						meetingId: this.room.id,
-						day: '',
+						day: day,
 					},
 				}).then(res => {
-					console.log(res)
 					if(res.data.code == 200) {
 						this.room = res.data.data;
 						this.assort = res.data.data.assort.split(',');
-						this.initRoomStatus();
+						this.initSelectDate();						
 					} else {
 						this.$toast(res.data.msg);
 					}
 				}).catch(res => {
 					this.$toast('系统出错了');
 				});
+			},
+			initSelectDate() {
 				/*获取配置信息选择日期*/
 				this.$axios({
 					method: 'post',
@@ -139,19 +146,20 @@
 					},
 				}).then(res => {
 					if(res.data.code == 200) {
-						let maxDays = parseInt(res.data.data.subscribeMpAdvanceDays);
+						let maxDays = parseInt(res.data.data.subscribeMpAdvanceDays);						
 						for(let i = 0; i < maxDays; i++) {
 							let newDate = new Date();
 							newDate.setDate(newDate.getDate() + i);
 							let year = newDate.getYear() + 1900;
 							let month = newDate.getMonth() + 1;
+							let active = false;
 							let day = newDate.getDate();
 							let dateDay = checktime(month) + '.' + checktime(day);
 							let dateWeek = '';
-							let dateValue = year + '-' + checktime(month) + '-' + checktime(day);
-							let active = false;
-							if(i == 0) {
+							let dateValue = year + '-' + checktime(month) + '-' + checktime(day);							
+							if(dateValue == this.selectDay) {
 								active = true;
+								this.selectDay=dateValue;
 							}
 							let week = newDate.getDay();
 							switch(week) {
@@ -191,74 +199,208 @@
 									});
 								}
 							})
-							console.log(this.dateSelectList)
 						}
+						let hasActive=false;
+						this.dateSelectList.forEach((x,i)=>{
+							if(x.active){
+								hasActive=true;
+							}
+						})
+						if(!hasActive){
+							this.dateSelectList[0].active=true;
+							this.selectDay=this.dateSelectList[0].text;														
+						}
+						this.changeRoomStatus(this.selectDay);
 					}
 				}).catch(res => {
 					console.log(res)
 				});
 			},
 			initRoomStatus() {
-				let sHour = this.room.startTime.split(":")[0] || 0;
-				sHour = parseInt(sHour);
-				let sMinute = this.room.startTime.split(":")[1] || 0;
-				sMinute = parseInt(sMinute);
-				let eHour = this.room.endTime.split(":")[0] || 0;
-				eHour = parseInt(eHour);
-				let eMinute = this.room.endTime.split(":")[1] || 0;
-				eMinute = parseInt(eMinute);
-				for(let i = sHour; i <= eHour; i++) {
-					if(i == sHour) {
-						if(sMinute < 30) {
-							this.status.time.push({
-								'hour': checktime(sHour),
-								'minute': '00'
-							})
+				this.status = [];
+				this.timeSlice(this.room.startTime, this.room.endTime, 5);
+				if(this.room.orderTimePeriodList) {
+					this.room.orderTimePeriodList.forEach((x, i) => {
+						if(x.status == 0) {
+							this.timeSlice(x.startTime, x.endTime, 0)
 						}
-						this.status.time.push({
-							'hour': checktime(sHour),
-							'minute': '30'
-						})
-					} else if(i == eHour) {
-						this.status.time.push({
-							'hour': checktime(eHour),
-							'minute': '00'
-						})
-						if(eMinute > 30) {
-							this.status.time.push({
-								'hour': checktime(eHour),
-								'minute': '30'
-							})
+						if(x.status == 1) {
+							this.timeSlice(x.startTime, x.endTime, 1)
 						}
-					} else {
-						this.status.time.push({
-							'hour': checktime(i),
-							'minute': '00'
-						})
-						this.status.time.push({
-							'hour': checktime(i),
-							'minute': '30'
-						})
-					}
+					})
 				}
-				console.table(this.status.time)
+			},
+			changeRoomStatus(day) {				
+				this.$axios({
+					method: 'post',
+					url: 'meeting/detail',
+					data: {
+						meetingId: this.room.id,
+						day: day,
+					},
+				}).then(res => {
+					if(res.data.code == 200) {
+						this.room = res.data.data;						
+						this.initRoomStatus();
+					} else {
+						this.$toast(res.data.msg);
+					}
+				}).catch(res => {
+					this.$toast('系统出错了');
+				});
+			},
+			timeSlice(startTime, endTime, status) {
+				let sHour = startTime.split(":")[0] || 0;
+				sHour = parseInt(sHour);
+				let sMinute = startTime.split(":")[1] || 0;
+				sMinute = parseInt(sMinute);
+				let eHour = endTime.split(":")[0] || 0;
+				eHour = parseInt(eHour);
+				let eMinute = endTime.split(":")[1] || 0;
+				eMinute = parseInt(eMinute);
+				console.log(sHour, sMinute, eHour, eMinute)
+				let timeList = [];
+				if(status == 5) {
+					for(let i = sHour; i <= eHour; i++) {
+						if(i == sHour) {
+							if(sMinute < 30) {
+								timeList.push({
+									'hour': checktime(sHour),
+									'minute': '00',
+									'status': status,
+								})
+							}
+							timeList.push({
+								'hour': checktime(sHour),
+								'minute': '30',
+								'status': status,
+							})
+						} else if(i == eHour) {
+							timeList.push({
+								'hour': checktime(eHour),
+								'minute': '00',
+								'status': status,
+							})
+							if(eMinute > 30) {
+								timeList.push({
+									'hour': checktime(eHour),
+									'minute': '30',
+									'status': status,
+								})
+							}
+						} else {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '00',
+								'status': status,
+							})
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '30',
+								'status': status,
+							})
+						}
+					}
+					this.status = timeList;
+				} else {
+					for(let i = sHour; i <= eHour; i++) {
+						if(i >= sHour && i <= eHour) {
+							if(i > sHour && i < eHour) {
+								timeList.push({
+									'hour': checktime(i),
+									'minute': '00',
+									'status': status,
+								})
+								timeList.push({
+									'hour': checktime(i),
+									'minute': '30',
+									'status': status,
+								})
+							} else if(i == sHour) {
+								if(sMinute == '00') {
+									timeList.push({
+										'hour': checktime(i),
+										'minute': '00',
+										'status': status,
+									})
+									if(i < eHour || eMinute == '59') {
+										timeList.push({
+											'hour': checktime(i),
+											'minute': '30',
+											'status': status,
+										})
+									}
+								} else if(sMinute == '30') {
+									timeList.push({
+										'hour': checktime(i),
+										'minute': '30',
+										'status': status,
+									})
+								}
+							} else if(i == eHour) {
+								if(sMinute == '00') {
+									timeList.push({
+										'hour': checktime(i),
+										'minute': '00',
+										'status': status,
+									})
+									if(i < eHour || eMinute == '59') {
+										timeList.push({
+											'hour': checktime(i),
+											'minute': '30',
+											'status': status,
+										})
+									}
+								} else if(sMinute == '30') {
+									timeList.push({
+										'hour': checktime(i),
+										'minute': '30',
+										'status': status,
+									})
+								}
+							}
+
+						}
+
+					}
+					this.status.forEach((x, i) => {
+						timeList.forEach((y, j) => {
+							if(x.hour == y.hour && x.minute == y.minute) {
+								x.status = y.status;
+							}
+						})
+					})
+				}
 			},
 			handle_dateSelectShow() {
 				this.dateSelectShow = true;
 			},
-			handle_dateSelect_change(id) {
+			handle_dateSelect_change(id) {				
 				this.dateSelectList.forEach((x, i) => {
 					if(id == i) {
-						x.active = true;
+						x.active = true;						
+						this.selectDay=x.text;
 					} else {
 						x.active = false;
 					}
 				})
 				this.dateIndex = id;
 				this.dateSelectShow = false;
+				this.changeRoomStatus(this.selectDay);
 			},
 			handle_date_confirm(value) {
 				this.handle_dateSelect_change(value.id);
+			},
+			handle_nav_book() {
+				console.log(this.selectDay)
+				let meetingRoomlistJson = {};
+				meetingRoomlistJson.id = this.room.id;
+				if(this.selectDay) {
+					meetingRoomlistJson.day = this.selectDay;
+				}
+				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);
+				sessionStorage.setItem("meetingRoomlist", meetingRoomlistStr);
+				this.$router.push("/meeting/book")
 			},
 		}
 	}

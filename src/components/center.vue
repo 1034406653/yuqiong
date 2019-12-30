@@ -183,7 +183,7 @@
 				this.$router.push('/meeting/roomList');	
 			},
 			handle_nav_meetingMy(){
-				
+				this.$router.push('/meeting/my');	
 			},
 		}
 	}

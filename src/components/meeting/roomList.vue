@@ -282,14 +282,12 @@
 				});
 			},
 			onLoadBottom() {
-				console.log('123')
 				this.finished = true;
 				this.$axios({
 					method: 'post',
 					url: 'meeting/search',
 					data: this.pSelect,
 				}).then(res => {
-					console.log(res)
 					if(res.data.code == 200) {						
 						if(res.data.data.length < 3) {
 							this.finished = true;
@@ -377,7 +375,7 @@
 				let meetingRoomlistJson = {};
 				meetingRoomlistJson.id = item.id;
 				if(this.day){
-					meetingRoomlistJson.day=this.day
+					meetingRoomlistJson.day=this.day.text2;
 				}				
 				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);				
 				sessionStorage.setItem("meetingRoomlist",meetingRoomlistStr);

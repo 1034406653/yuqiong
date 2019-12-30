@@ -1,0 +1,32 @@
+.meetingMy {
+    padding-top: 74px;
+    .van-tabs {
+        height: 90px;
+        .van-tabs__wrap {
+            height: 90px;
+        }
+        .van-tab {
+            position: relative;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            box-sizing: border-box;
+            min-width: 0;
+            padding: 0 0.066667rem;
+            color: #9D9D9D;
+            font-size: 32px;
+            line-height: 90px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .van-tabs__line {
+            width: 164px;
+            height: 4px;
+            background: rgba(53, 158, 249, 1);
+            border-radius: 2px;
+        }
+        .van-tabs__content{
+            display: none;
+        }
+    }
+}

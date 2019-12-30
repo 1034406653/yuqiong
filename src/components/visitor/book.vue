@@ -58,8 +58,7 @@
 					needCompany: false,
 					needIdNumber: false,
 					needReason: false,
-				}
-				
+				}				
 			}
 		},
 		components: {
