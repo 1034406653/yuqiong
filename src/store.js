@@ -130,6 +130,14 @@ const mutations = {
 		}	
 		sessionStorage.setItem('haveVipElevator', haveVipElevator);
 	},
+	initHaveVipMeeting(state, haveVipMeeting) {
+		if(haveVipMeeting){
+			state.haveVipMeeting = true;
+		}else{
+			state.haveVipMeeting = false;
+		}	
+		sessionStorage.setItem('haveVipMeeting', haveVipMeeting);
+	},
 }
 for(let key in state) {
 	if(sessionStorage.getItem(key)=='true'){

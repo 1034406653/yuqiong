@@ -104,6 +104,14 @@
 				<ColorBtn @handleBtnClick="$router.push('/')" :btnClassName.sync='btnClassName'>我知道了</ColorBtn>
 			</div>
 		</div>
+		<!--会议相关-->
+		<div v-if="type=='meetingBookSuccess'">
+			<img src="@/assets/img/hint_success.png" />
+			<p>预定成功</p>			
+			<div class="btn_box">
+				<ColorBtn @handleBtnClick="$router.push('/meeting/my')" :btnClassName.sync='btnClassName'>查看我的会议</ColorBtn>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -164,6 +172,10 @@
 			} else if(this.$route.query.type == 'blackListInvite') {
 				this.type = 'blackListInvite';
 				this.blackListPhone = this.$route.query.blackListPhone || '';
+				
+				/*会议相关*/
+			}else if(this.$route.query.type == 'meetingBookSuccess') {
+				this.type = 'meetingBookSuccess';				
 			}
 		},
 		methods: {

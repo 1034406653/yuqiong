@@ -100,29 +100,29 @@
 			ColorBtn
 		},
 		created() {
-			if(sessionStorage.getItem("meetingRoomlist")) {
-				let ronterJson = JSON.parse(sessionStorage.getItem("meetingRoomlist"));
+			if(sessionStorage.getItem("meetingRoomIdDay")) {
+				let ronterJson = JSON.parse(sessionStorage.getItem("meetingRoomIdDay"));
 				this.room.id = ronterJson.id;
 				if(ronterJson.day) {
-					this.selectDay = ronterJson.day;
+					this.selectDay = ronterJson.day.text2;
 				}
-				this.init(this.selectDay);
+				this.init();
 			} else {
 				this.$rounter.push('/meeting/roomList')
 			}
 		},
 		methods: {
 			navBack() {
-				this.$router.push('/');
+				this.$router.go(-1);
 			},
-			init(day) {
+			init() {
 				/*会议室信息*/
 				this.$axios({
 					method: 'post',
 					url: 'meeting/detail',
 					data: {
 						meetingId: this.room.id,
-						day: day,
+						day: this.selectDay,
 					},
 				}).then(res => {
 					if(res.data.code == 200) {
@@ -258,7 +258,6 @@
 				eHour = parseInt(eHour);
 				let eMinute = endTime.split(":")[1] || 0;
 				eMinute = parseInt(eMinute);
-				console.log(sHour, sMinute, eHour, eMinute)
 				let timeList = [];
 				if(status == 5) {
 					for(let i = sHour; i <= eHour; i++) {
@@ -392,14 +391,13 @@
 				this.handle_dateSelect_change(value.id);
 			},
 			handle_nav_book() {
-				console.log(this.selectDay)
 				let meetingRoomlistJson = {};
 				meetingRoomlistJson.id = this.room.id;
 				if(this.selectDay) {
 					meetingRoomlistJson.day = this.selectDay;
 				}
 				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);
-				sessionStorage.setItem("meetingRoomlist", meetingRoomlistStr);
+				sessionStorage.setItem("meetingRoomIdDay", meetingRoomlistStr);
 				this.$router.push("/meeting/book")
 			},
 		}

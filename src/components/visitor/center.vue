@@ -87,7 +87,6 @@
 					<p class="nomore" v-if='nomore'>没有更多了~</p>
 				</div>
 			</van-pull-refresh>
-
 		</div>
 
 		<div class="center_bottom">

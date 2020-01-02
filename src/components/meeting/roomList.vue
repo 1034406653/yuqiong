@@ -55,7 +55,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="room_box">
+			<div class="room_box" v-if='roomList.length>0'>
 				<van-list v-model="loading" :finished="finished" finished-text="" @load="onLoadBottom">
 					<ul>
 						<li v-for="item in roomList" @click="handle_nav_detail(item)">
@@ -76,6 +76,10 @@
 
 				</van-list>
 				<p class="nomore" v-if='nomore'>没有更多了~</p>
+			</div>
+			<div class="nodata" v-if='roomList.length<1'>
+				<img src="@/assets/img/meeting/nodata.png"/>
+				<p>暂无匹配结果</p>
 			</div>
 
 		</div>
@@ -259,6 +263,7 @@
 					url: 'meeting/search',
 					data: this.pSelect,
 				}).then(res => {
+					
 					this.$toast.clear();
 					if(res.data.code == 200) {
 						this.loading = false;
@@ -368,8 +373,8 @@
 					meetingRoomlistJson.day=this.day
 				}				
 				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);				
-				sessionStorage.setItem("meetingRoomlist",meetingRoomlistStr);
-				this.$router.push("/meeting/roomDetails")
+				sessionStorage.setItem("meetingRoomIdDay",meetingRoomlistStr);
+				this.$router.push("/meeting/room")
 			},
 			handle_nav_book(item){
 				let meetingRoomlistJson = {};
@@ -378,7 +383,7 @@
 					meetingRoomlistJson.day=this.day.text2;
 				}				
 				let meetingRoomlistStr = JSON.stringify(meetingRoomlistJson);				
-				sessionStorage.setItem("meetingRoomlist",meetingRoomlistStr);
+				sessionStorage.setItem("meetingRoomIdDay",meetingRoomlistStr);
 				this.$router.push("/meeting/book")
 			},
 			

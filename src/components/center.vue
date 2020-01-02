@@ -80,6 +80,7 @@
 		},
 		mounted() {
 			this.init();
+			this.$refs.percentActive.style.width = this.$store.state.percent;
 		},
 		methods: {
 			init() {
@@ -132,6 +133,11 @@
 						let percent = res.data.data.completePercent || '0%';
 						this.$store.commit('initPercent', percent)
 						this.$refs.percentActive.style.width = percent;
+						/*会议室权限*/
+						let haveVipMeeting = res.data.data.haveVipMeeting ? 1 : '';
+						this.$store.commit('initHaveVipMeeting', haveVipMeeting)
+						
+						
 					} else {
 						this.$toast(res.data.msg);
 					}

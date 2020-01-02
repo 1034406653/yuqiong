@@ -57,22 +57,24 @@
 	import Vuetree from 'vue-simple-tree'
 	Vue.use(Vuetree)
 	export default {
-		name: "Copyto",
+		name: "MeetingPeopelSelect",
 		components: {
 			HeaderNav,
 			ColorBtn
 		},
 		data() {
 			return {
+				meetingBook:{},
 				clearIconShow: false,
 				cancleShow: false,
 				searchWord: "",
 				orgList: [],
 				nameList: [],
-				inviteId: "",
+				peopleSelectList: [],
 				/*按钮*/
 				btnWhite: "colorBtnWhite",
 				btnBlue: "colorBtnBlue",
+
 			}
 		},
 		watch: {
@@ -108,12 +110,13 @@
 				deep: true //对象内部的属性监听，也叫深度监听
 			},
 		},
-		mounted() {
-			if(this.$route.query.id) {
-				this.inviteId = this.$route.query.id;
-			} else {
-				this.$router.push('/');
+		created() {
+			if(sessionStorage.getItem("meetingBook")) {				
+				this.meetingBook = JSON.parse(sessionStorage.getItem("meetingBook"))
+				this.peopleSelectList = this.meetingBook.peopleSelectList || [];				
 			}
+		},
+		mounted() {
 			this.init();
 		},
 		methods: {
@@ -129,13 +132,18 @@
 						pageSize: 10000,
 						pageNumber: 1,
 					},
-				}).then(res =>{
+				}).then(res => {
 					if(res.data.code == 200) {
 						let list = res.data.data;
 						list.forEach((x, i) => {
 							x.className = false;
 							x.employeeInfoList.forEach((y, j) => {
 								y.className = false;
+								this.peopleSelectList.forEach((z, q) => {
+									if(y.id == z.id) {
+										y.className = true;
+									}
+								})
 							})
 						})
 						this.orgList = list;
@@ -155,6 +163,7 @@
 			handleSubmit() {
 				let idList = [];
 				let nameList = [];
+				let list = [];
 				if(!this.cancleShow) {
 					this.orgList.forEach((x, i) => {
 						if(x.employeeInfoList) {
@@ -162,6 +171,10 @@
 								if(y.className) {
 									idList.push(y.id);
 									nameList.push(y.name);
+									list.push({
+										id: y.id,
+										name: y.name
+									})
 								}
 							})
 						}
@@ -171,40 +184,19 @@
 						if(x.className) {
 							idList.push(x.id);
 							nameList.push(x.name);
+							list.push({
+								id: x.id,
+								name: x.name
+							})
 						}
 					})
 				}
 				if(idList.length > 0) {
-					this.$axios({
-						method: 'post',
-						url: 'guest/carbonCopy',
-						data: {
-							openId: this.$openId,
-							ids: idList,
-							inviteId: this.inviteId,
-						},
-					}).then(res => {
-						console.log(res)
-						if(res.data.code == 200) {
-							if(res.data.data.flag) {
-								this.$router.push({
-									path: "/hint",
-									query: {
-										type: "copytoSuccess",
-										nameList: nameList.join('、'),
-									}
-								})
-							} else {
-								this.$toast(res.data.data.msg);
-							}
-						} else {
-							this.$toast(res.data.msg);
-						}
-					}).catch(res => {
-						console.log(res)
-					});
+					this.meetingBook.peopleSelectList=list;
+					sessionStorage.setItem('meetingBook', JSON.stringify(this.meetingBook));
+					this.$router.push('/meeting/book')
 				} else {
-					this.$toast('请选择抄送人');
+					this.$toast('请选择参与人');
 				}
 			},
 			handleChangeOrgNameClassName(index) {

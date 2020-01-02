@@ -88,12 +88,16 @@ const ElevatorFloor = () =>
 
 const MeetingRoomList = () =>
 	import('@/components/meeting/roomList')
-const MeetingRoomDetails = () =>
-	import('@/components/meeting/roomDetails')
+const MeetingRoom = () =>
+	import('@/components/meeting/room')
 const MeetingMy = () =>
 	import('@/components/meeting/my')
 const MeetingBook = () =>
 	import('@/components/meeting/book')
+const MeetingParticipant = () =>
+	import('@/components/meeting/participant')
+const MeetingDetails = () =>
+	import('@/components/meeting/details')
 
 Vue.use(Router)
 export default new Router({
@@ -340,9 +344,9 @@ export default new Router({
 			}
 		},
 		{
-			path: '/meeting/roomDetails',
-			name: 'MeetingRoomDetails',
-			component: MeetingRoomDetails,
+			path: '/meeting/room',
+			name: 'MeetingRoom',
+			component: MeetingRoom,
 			meta: {
 				title: "会议室详情"
 			}
@@ -361,6 +365,14 @@ export default new Router({
 			component: MeetingBook,
 			meta: {
 				title: "会议室预定"
+			}
+		},
+		{
+			path: '/meeting/participant',
+			name: 'MeetingParticipant',
+			component: MeetingParticipant,
+			meta: {
+				title: "选择参与人"
 			}
 		},
 	]

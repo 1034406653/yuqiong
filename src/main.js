@@ -47,6 +47,11 @@ router.beforeEach((to, from, next) => {
 			window.localStorage.removeItem("inviteEndTime");
 			window.localStorage.removeItem("pInviteData");
 		}
+		/*会议预约清理*/
+		
+		if(to.path != '/meeting/participant' && to.path != '/meeting/book') {
+			window.sessionStorage.removeItem("meetingBook");			
+		}
 		next();
 	} else {
 		if(to.path == '/staff/bindPhone' || to.path == '/staff/qrcode') {
