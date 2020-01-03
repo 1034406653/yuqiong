@@ -72,11 +72,45 @@
             padding-top: 30px;
             background: #fff;
             .title {
-                text-align: left;
-                font-size: 32px;
-                font-weight: 600;
-                line-height: 44px;
+                width: 100%;
+                display: flex;
+                height: 74px;
                 padding-bottom: 30px;
+                .text {
+                    text-align: left;
+                    font-size: 32px;
+                    font-weight: 600;
+                    line-height: 44px;
+                }
+                .label{
+                    width: auto;
+                    display: flex;
+                    margin-left: 350px;
+                    p{
+                        display: flex;                       
+                        b{
+                           width: 16px;
+                           height: 16px;
+                           margin-top: 14px;
+                           border-radius: 50%;
+                           margin-right: 10px; 
+                           &.colorGreen{
+                               background: #5CD19F;
+                           }
+                           &.colorYellow{
+                               background: #FFD34D;
+                           }
+                        }
+                        span{
+                            font-size: 24px;
+                            height: 44px;
+                            line-height: 44px;                            
+                        }
+                        &:first-child{
+                            margin-right: 10px;
+                        }
+                    }
+                }
             }
             .select_date {
                 width: 100%;
@@ -129,10 +163,11 @@
             padding-top: 20px;
             .time_line {
                 width: 100%;
-                height: 138px;
+                height: auto;
+                padding-bottom: 8px;
                 ul {
                     width: auto;
-                    height: 130px;
+                    height: auto;
                     display: flex;
                     overflow-x: auto;
                     li {

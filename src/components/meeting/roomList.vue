@@ -89,8 +89,7 @@
 <script>
 	import HeaderNav from '../common/headerNav'
 	import Vue from 'vue';
-	import { Picker } from 'vant';
-	import { List } from 'vant';
+	import { Picker,List } from 'vant';	
 	Vue.use(Picker);
 	Vue.use(List);
 	export default {

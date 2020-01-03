@@ -58,7 +58,7 @@
 					<span>会议参与人：</span>
 				</div>
 				<div class="right_item" @click="handle_nav_peopelSelect">
-					<p class="right_p"><span v-for="(item,index) in pBook.participantList" v-if='index<2'>{{item.name}}<span v-if="index<pBook.participantList.length-1&&index!=1">,</span></span><span v-if="pBook.participantList.length>2">等</span><span v-if="pBook.participantList.length<1">请选择</span></p>
+					<p class="right_p"><span v-for="(item,index) in pBook.participantList" v-if='index<2'>{{item.name}}<span v-if="index<pBook.participantList.length-1&&index!=1">,</span></span><span v-if="pBook.participantList.length>2">等{{pBook.participantList.length}}人</span><span v-if="pBook.participantList.length<1">请选择</span></p>
 				</div>
 			</div>
 			<b class="borde"></b>
@@ -119,8 +119,8 @@
 					<input type="text" class="right_input" v-model="pBook.remark" placeholder="请输入" />
 				</div>
 			</div>
-			<b class="borde"></b>
-			<div class="check_box">
+			<b class="borde" v-if="pBook.serviceList.length>0"></b>
+			<div class="check_box" v-if="pBook.serviceList.length>0">
 				<div class="label">
 					<span>服务：</span>
 				</div>

@@ -70,7 +70,7 @@
 				searchWord: "",
 				orgList: [],
 				nameList: [],
-				peopleSelectList: [],
+				participantList: [],
 				/*按钮*/
 				btnWhite: "colorBtnWhite",
 				btnBlue: "colorBtnBlue",
@@ -113,7 +113,7 @@
 		created() {
 			if(sessionStorage.getItem("meetingBook")) {				
 				this.meetingBook = JSON.parse(sessionStorage.getItem("meetingBook"))
-				this.peopleSelectList = this.meetingBook.peopleSelectList || [];				
+				this.participantList = this.meetingBook.participantList || [];				
 			}
 		},
 		mounted() {
@@ -139,7 +139,7 @@
 							x.className = false;
 							x.employeeInfoList.forEach((y, j) => {
 								y.className = false;
-								this.peopleSelectList.forEach((z, q) => {
+								this.participantList.forEach((z, q) => {
 									if(y.id == z.id) {
 										y.className = true;
 									}
@@ -192,7 +192,7 @@
 					})
 				}
 				if(idList.length > 0) {
-					this.meetingBook.peopleSelectList=list;
+					this.meetingBook.participantList=list;
 					sessionStorage.setItem('meetingBook', JSON.stringify(this.meetingBook));
 					this.$router.push('/meeting/book')
 				} else {

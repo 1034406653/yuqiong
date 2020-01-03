@@ -201,6 +201,7 @@
 							audit: "agree",
 						},
 					}).then(res => {
+						this.$toast.clear();
 						if(res.data.code == 200) {
 							if(res.data.data.flag) {
 								this.$toast(res.data.data.msg)
@@ -210,8 +211,7 @@
 							}
 						} else {
 							this.$toast(res.data.msg)
-						}
-						this.$toast.clear();
+						}						
 					}).catch(res => {
 						this.$toast.clear();
 					});

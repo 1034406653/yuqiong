@@ -20,7 +20,13 @@
 			</div>
 			<div class="book_information">
 				<div class="title">
-					预订情况
+					<div class="text">
+						预订情况
+					</div>
+					<div class="label">
+						<p><b class="colorGreen"></b><span>已预订</span></p>
+						<p><b class="colorYellow"></b><span>已开始</span></p>
+					</div>
 				</div>
 				<div class="select_date">
 					<div class="select_date_list">
@@ -36,7 +42,7 @@
 				<div class="room_status">
 					<div class="time_line">
 						<ul>
-							<li v-for="item in status" v-if='item.hour<12'>
+							<li v-for="item in statusList" v-if='item.hour<12'>
 								<div class="bg">
 									<div class="book_bg" v-if='item.status==0'></div>
 									<div class="ing_bg" v-if='item.status==1'></div>
@@ -47,7 +53,7 @@
 					</div>
 					<div class="time_line">
 						<ul>
-							<li v-for="item in status" v-if='item.hour>=12'>
+							<li v-for="item in statusList" v-if='item.hour>=12'>
 								<div class="bg">
 									<div class="book_bg" v-if='item.status==0'></div>
 									<div class="ing_bg" v-if='item.status==1'></div>
@@ -92,7 +98,7 @@
 				dateSelectList: [],
 				startTime: '00:00',
 				enTime: '24:00',
-				status: [],
+				statusList: [],
 			}
 		},
 		components: {
@@ -125,6 +131,7 @@
 						day: this.selectDay,
 					},
 				}).then(res => {
+					console.log(res)
 					if(res.data.code == 200) {
 						this.room = res.data.data;
 						this.assort = res.data.data.assort.split(',');
@@ -217,7 +224,7 @@
 				});
 			},
 			initRoomStatus() {
-				this.status = [];
+				this.statusList = [];
 				this.timeSlice(this.room.startTime, this.room.endTime, 5);
 				if(this.room.orderTimePeriodList) {
 					this.room.orderTimePeriodList.forEach((x, i) => {
@@ -250,6 +257,7 @@
 				});
 			},
 			timeSlice(startTime, endTime, status) {
+				console.log(startTime, endTime, status)
 				let sHour = startTime.split(":")[0] || 0;
 				sHour = parseInt(sHour);
 				let sMinute = startTime.split(":")[1] || 0;
@@ -300,8 +308,9 @@
 							})
 						}
 					}
-					this.status = timeList;
+					this.statusList = timeList;
 				} else {
+					console.log(sHour,eHour)
 					for(let i = sHour; i <= eHour; i++) {
 						if(i >= sHour && i <= eHour) {
 							if(i > sHour && i < eHour) {
@@ -321,8 +330,8 @@
 										'hour': checktime(i),
 										'minute': '00',
 										'status': status,
-									})
-									if(i < eHour || eMinute == '59') {
+									})									
+									if(eMinute == '59' || i<eHour) {
 										timeList.push({
 											'hour': checktime(i),
 											'minute': '30',
@@ -337,20 +346,19 @@
 									})
 								}
 							} else if(i == eHour) {
-								if(sMinute == '00') {
+								if(eMinute == '29') {
 									timeList.push({
 										'hour': checktime(i),
 										'minute': '00',
 										'status': status,
 									})
-									if(i < eHour || eMinute == '59') {
-										timeList.push({
-											'hour': checktime(i),
-											'minute': '30',
-											'status': status,
-										})
-									}
-								} else if(sMinute == '30') {
+									
+								} else if(eMinute == '59') {
+									timeList.push({
+										'hour': checktime(i),
+										'minute': '00',
+										'status': status,
+									})
 									timeList.push({
 										'hour': checktime(i),
 										'minute': '30',
@@ -362,7 +370,7 @@
 						}
 
 					}
-					this.status.forEach((x, i) => {
+					this.statusList.forEach((x, i) => {
 						timeList.forEach((y, j) => {
 							if(x.hour == y.hour && x.minute == y.minute) {
 								x.status = y.status;
@@ -405,5 +413,5 @@
 </script>
 
 <style lang="scss">
-	@import "../../assets/scss/meetingRoomDetails";
+	@import "../../assets/scss/meetingRoom";
 </style>

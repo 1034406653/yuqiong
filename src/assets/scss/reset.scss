@@ -1,4 +1,5 @@
 /* 初始化 */
+
 html,
 body {
     text-align: center;
@@ -7,7 +8,7 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;   
+    box-sizing: border-box;
     font-size: 24px;
     color: #03274C;
     overflow-x: hidden;
@@ -48,7 +49,7 @@ body {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);       
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
     button {
         outline: none;
@@ -87,5 +88,22 @@ body {
         content: '';
         visibility: hidden;
         height: 0
+    }
+    .nodata {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding-top: 160px;
+        img {
+            width: 230px;
+            height: 226px;
+            margin: 0 auto;
+            margin-bottom: 38px;
+        }
+        p {
+            line-height: 50px;
+            color: #9D9D9D;
+            font-size: 36px;
+        }
     }
 }
