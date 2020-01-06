@@ -1,18 +1,19 @@
 @keyframes elevatorUp {
-    from {
-        transform: translateY(-259px);
-    }
-    to {
+     from {
         transform: translateY(259px);
     }
+    to {
+        transform: translateY(-259px);
+    }
+    
 }
 
 @keyframes elevatorDown {
-    from {
-        transform: translateY(259px);
+   from {
+        transform: translateY(-259px);
     }
     to {
-        transform: translateY(-259px);
+        transform: translateY(259px);
     }
 }
 
@@ -132,7 +133,7 @@
                     }
                     .main {
                         div {
-                            animation: elevatorUp 4s linear infinite;
+                            animation: elevatorUp 8s linear infinite;
                         }
                     }
                 }
@@ -144,7 +145,7 @@
                     }
                     .main {
                         div {
-                            animation: elevatorDown 4s linear infinite;
+                            animation: elevatorDown 8s linear infinite;
                         }
                     }
                 }

@@ -59,10 +59,10 @@
 		data() {
 			return {	
 				elevator:[{
-					type:'up',
+					type:'down',
 					name:'1号梯'
 				},{
-					type:'down',
+					type:'up',
 					name:'2号梯'
 				},{
 					type:'free',

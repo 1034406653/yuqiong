@@ -231,6 +231,8 @@
 				},
 				/*按钮*/
 				btnClassName: "colorBtnBlue",
+				/*修改会议*/
+				recordId:'',
 			}
 		},
 		beforeRouteEnter(to, from, next) {
@@ -249,15 +251,19 @@
 			}
 		},
 		created() {
+			if(sessionStorage.getItem("meetingBookRecordId")){
+				this.recordId=sessionStorage.getItem("meetingBookRecordId");
+				this.initNewBook();
+			}
 			if(sessionStorage.getItem("meetingBook")) {
 				this.pBook = JSON.parse(sessionStorage.getItem("meetingBook"));
-			} else if(sessionStorage.getItem("meetingRoomIdDay")) {
+			} else if(sessionStorage.getItem("meetingRoomIdDay")&&!sessionStorage.getItem("meetingBookRecordId")) {
 				let ronterJson = JSON.parse(sessionStorage.getItem("meetingRoomIdDay"));
 				this.pBook.meetingId = ronterJson.id;
 				this.pBook.day = ronterJson.day || '';
 				this.init();
 				this.initService();
-			} else {
+			} else if(!sessionStorage.getItem("meetingBookRecordId")) {
 				this.$router.push('/meeting/roomList')
 			}
 		},
@@ -282,6 +288,26 @@
 						this.pBook.configStart = res.data.data.startTime.split(':')[0];
 						this.pBook.configEnd = res.data.data.endTime.split(':')[0];
 						this.initSelectDate();
+					} else {
+						this.$toast(res.data.msg);
+					}
+				}).catch(res => {
+					this.$toast('系统出错了');
+				});
+			},
+			initNewBook(){
+				this.$axios({
+					method: 'post',
+					url: 'meeting/record/detail',
+					data: {
+						meetingId: this.pBook.meetingId,
+						recordId: this.recordId,
+					},
+				}).then(res => {
+					console.log(res)
+					if(res.data.code == 200) {						
+						this.pBook.meetingTitle = res.data.data.subject;
+						this.pBook.name = res.data.data.name;						
 					} else {
 						this.$toast(res.data.msg);
 					}

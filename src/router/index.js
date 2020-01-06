@@ -375,5 +375,13 @@ export default new Router({
 				title: "选择参与人"
 			}
 		},
+		{
+			path: '/meeting/details',
+			name: 'MeetingDetails',
+			component: MeetingDetails,
+			meta: {
+				title: "我的会议"
+			}
+		},
 	]
 })

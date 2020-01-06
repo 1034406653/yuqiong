@@ -18,6 +18,7 @@ const state = {
 	needIdNumber:false,
 	needReason:false,
 	needCompany:false,
+	employee:false,
 	isAdmin:false,
 	employeeCode:"",	
 	elevatorVip:false,//公司
@@ -101,6 +102,14 @@ const mutations = {
 			state.isAdmin = false;
 		}	
 		sessionStorage.setItem('isAdmin', isAdmin);
+	},
+	initEmployee(state, employee) {
+		if(employee){
+			state.employee = true;
+		}else{
+			state.employee = false;
+		}	
+		sessionStorage.setItem('employee', employee);
 	},
 	initEmployeeCode(state, employeeCode) {
 		state.employeeCode = employeeCode;

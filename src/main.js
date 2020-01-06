@@ -47,8 +47,7 @@ router.beforeEach((to, from, next) => {
 			window.localStorage.removeItem("inviteEndTime");
 			window.localStorage.removeItem("pInviteData");
 		}
-		/*会议预约清理*/
-		
+		/*会议预约清理*/		
 		if(to.path != '/meeting/participant' && to.path != '/meeting/book') {
 			window.sessionStorage.removeItem("meetingBook");			
 		}
@@ -71,7 +70,7 @@ router.beforeEach((to, from, next) => {
 				url: '/wx/api/login',
 			}).then(res => {
 				let formPath = '1'
-				 //let formPath = '0'				
+				//let formPath = '0'				
 				location.href = res.data.data.url.split('&state')[0] + "&state=" + formPath;
 			}).catch(res => {
 				console.log(res)

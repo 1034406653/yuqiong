@@ -9,7 +9,7 @@
 			<div class="meetingRecord" v-if='meetingRecord.length>0'>
 				<van-list v-model="loading" :finished="finished" finished-text="" @load="onLoadBottom">
 					<ul>
-						<li v-for="(item,index) in meetingRecord">
+						<li v-for="(item,index) in meetingRecord" @click="handle_nav_details(item.id)">
 							<div class="time">
 								{{item.displayTime}}
 							</div>
@@ -29,16 +29,16 @@
 									<span class="status4" v-if='item.status==4'>待接受</span>
 									<span v-if='item.status==5'>已拒绝</span>
 								</div>
-								<div class="card_btn" v-if='item.status==0' @click="handle_qrcode_show(item)">
+								<div class="card_btn" v-if='item.status==0' @click.stop="handle_qrcode_show(item)">
 									签到
 								</div>
-								<div class="card_btn" v-if='item.status==1' @click="handle_qrcode_show(item)">
+								<div class="card_btn" v-if='item.status==1' @click.stop="handle_qrcode_show(item)">
 									通行码
 								</div>
 								<div class="card_btn" v-if='item.status==4'>
-									<span @click="handle_deal(item.id,2)">拒绝</span>
+									<span @click.stop="handle_deal(item.id,2)">拒绝</span>
 									<b></b>
-									<span @click="handle_deal(item.id,1)">接受</span>
+									<span @click.stop="handle_deal(item.id,1)">接受</span>
 								</div>
 							</div>
 						</li>
@@ -186,7 +186,7 @@
 				});
 
 			},
-
+			
 			handle_qrcode_show(item) {
 				this.qrcodeName = item.name || "三牧";
 				this.qrcodeTime = item.time;
@@ -246,6 +246,14 @@
 					this.$toast.clear();
 				});
 			},
+			handle_nav_details(id){
+				this.$router.push({
+					path:'/meeting/details',
+					query:{
+						id:id,
+					}
+				})
+			}
 		}
 	}
 </script>

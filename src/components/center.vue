@@ -3,8 +3,8 @@
 		<div :class="[vipActive ? 'vipActive' : '', 'header']">
 			<div class="portrait" @click="$router.push('/information')">
 				<img :src="$store.state.headImg" />
-				<span v-if="!$store.state.isAdmin">访客</span>
-				<span v-if="$store.state.isAdmin">员工</span>
+				<span v-if="!$store.state.employee">访客</span>
+				<span v-if="$store.state.employee">员工</span>
 			</div>
 			<div class="information" @click="$router.push('/information')">
 				<p class="p1"><span>{{$store.state.nickName || ''}}</span></p>
@@ -95,15 +95,17 @@
 					console.log(res)
 					if(res.data.code == 200) {
 						if(!res.data.data.id) {
-							/*this.$axios({
+							this.$axios({
 								method: 'get',
 								url: '/wx/api/login',
 							}).then(res => {
 								location.href = res.data.data.url.split('&state')[0] + '&state=' + '0';
 							}).catch(res => {
 								console.log(res)
-							});*/
+							});
 						}
+						let employee = res.data.data.employee ? 1 : '';
+						this.$store.commit('initEmployee', employee);
 						let isAdmin = res.data.data.admin ? 1 : '';
 						this.$store.commit('initIsAdmin', isAdmin);
 						let headImg = res.data.data.headimgurl || require('@/assets/img/head_portrait.png');
