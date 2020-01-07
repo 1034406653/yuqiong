@@ -51,6 +51,10 @@ router.beforeEach((to, from, next) => {
 		if(to.path != '/meeting/participant' && to.path != '/meeting/book') {
 			window.sessionStorage.removeItem("meetingBook");			
 		}
+		if(to.path != '/meeting/participant' && to.path != '/meeting/book' && to.path != '/meeting/details') {
+			window.sessionStorage.removeItem("meetingBookRecordIdChange");			
+			window.sessionStorage.removeItem("meetingBookRecordIdNew");			
+		}
 		next();
 	} else {
 		if(to.path == '/staff/bindPhone' || to.path == '/staff/qrcode') {

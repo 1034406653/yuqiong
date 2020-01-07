@@ -87,12 +87,12 @@
 				</div>
 				<div class="fileList">
 					<ul>
-						<li v-for='(item,index) in pBook.fileList'>						
+						<li v-for='(item,index) in pBook.fileList'>
 							<div class="main">
-								<img :src="item.fileUrl" v-if="item.fileType=='image'"/>
-								<img src="@/assets/img/meeting/ppt.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.presentationml.presentation'"/>
-								<img src="@/assets/img/meeting/excel.png" v-if="item.fileType=='application/vnd.ms-excel'"/>
-								<img src="@/assets/img/meeting/word.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'"/>
+								<img :src="item.fileUrl" v-if="item.fileType=='image'" />
+								<img src="@/assets/img/meeting/ppt.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.presentationml.presentation'" />
+								<img src="@/assets/img/meeting/excel.png" v-if="item.fileType=='application/vnd.ms-excel'" />
+								<img src="@/assets/img/meeting/word.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'" />
 								<div class="information">
 									<p>{{item.fileName}}</p>
 									<p>{{(item.fileSize/1024).toFixed(2)}}KB</p>
@@ -232,12 +232,12 @@
 				/*按钮*/
 				btnClassName: "colorBtnBlue",
 				/*修改会议*/
-				recordId:'',
+				recordIdChange: '',
+				recordIdNew: '',
 			}
 		},
 		beforeRouteEnter(to, from, next) {
 			if(from.path != '/meeting/participant') {
-				console.log('000')
 				window.sessionStorage.removeItem("meetingBook");
 			}
 			next();
@@ -251,19 +251,21 @@
 			}
 		},
 		created() {
-			if(sessionStorage.getItem("meetingBookRecordId")){
-				this.recordId=sessionStorage.getItem("meetingBookRecordId");
-				this.initNewBook();
-			}
 			if(sessionStorage.getItem("meetingBook")) {
 				this.pBook = JSON.parse(sessionStorage.getItem("meetingBook"));
-			} else if(sessionStorage.getItem("meetingRoomIdDay")&&!sessionStorage.getItem("meetingBookRecordId")) {
+			} else if(sessionStorage.getItem("meetingBookRecordIdChange")) {
+				this.recordIdChange = sessionStorage.getItem("meetingBookRecordIdChange");
+				this.initChangeBook();
+			} else if(sessionStorage.getItem("meetingBookRecordIdNew")) {
+				this.recordIdNew = sessionStorage.getItem("meetingBookRecordIdNew");
+				this.initChangeBook();
+			} else if(sessionStorage.getItem("meetingRoomIdDay")) {
 				let ronterJson = JSON.parse(sessionStorage.getItem("meetingRoomIdDay"));
 				this.pBook.meetingId = ronterJson.id;
 				this.pBook.day = ronterJson.day || '';
 				this.init();
 				this.initService();
-			} else if(!sessionStorage.getItem("meetingBookRecordId")) {
+			} else {
 				this.$router.push('/meeting/roomList')
 			}
 		},
@@ -282,7 +284,9 @@
 				}).then(res => {
 					console.log(res)
 					if(res.data.code == 200) {
-						this.pBook.name = res.data.data.name;
+						if(!this.recordIdChange){
+							this.pBook.name = res.data.data.name;
+						}						
 						this.pBook.roomPrice = res.data.data.price;
 						this.pBook.openWeek = res.data.data.openWeek;
 						this.pBook.configStart = res.data.data.startTime.split(':')[0];
@@ -295,27 +299,76 @@
 					this.$toast('系统出错了');
 				});
 			},
-			initNewBook(){
+			initChangeBook() {
+				let recordId=this.recordIdChange||this.recordIdNew;
+				/*获取上个记录信息*/
 				this.$axios({
 					method: 'post',
 					url: 'meeting/record/detail',
 					data: {
-						meetingId: this.pBook.meetingId,
-						recordId: this.recordId,
+						openId: this.$openId,
+						recordId: recordId,
 					},
 				}).then(res => {
 					console.log(res)
-					if(res.data.code == 200) {						
+					if(res.data.code == 200) {
+						this.pBook.meetingId = res.data.data.meetingId;
+						let time = res.data.data.time.split(' ');
+						if(this.recordIdChange){
+							this.pBook.day = time[0];
+						}						
+						/*初始化配置*/
+						this.init();
+						let serviceIdList = [];
+						res.data.data.serviceList.forEach((x, i) => {
+							serviceIdList.push(x.configMeetingServiceId)
+						})
+						/*初始化服务*/
+						this.initService(serviceIdList);
 						this.pBook.meetingTitle = res.data.data.subject;
-						this.pBook.name = res.data.data.name;						
+						this.pBook.name = res.data.data.name;
+						this.pBook.startTime = time[1].split('~')[0].slice(0, 5);
+						let eH = time[1].split('~')[1].slice(0, 5).split(':')[0];
+						let eM = time[1].split('~')[1].slice(0, 5).split(':')[1];
+						if(eM == '59') {
+							eM = '00'
+							eH = checktime(parseInt(eH) + 1);
+						} else {
+							eM = '30'
+						}
+						this.pBook.endTime = eH + ":" + eM;
+						this.pBook.outParticipant = res.data.data.outerPlayerNumber;
+						this.remindList.value.forEach((x, i) => {
+							if(x == res.data.data.remindMinute) {
+								this.pBook.remind = this.remindList.label[i];
+							}
+						})
+						this.pBook.remark = res.data.data.remark;
+						this.pBook.participantList = [];
+						res.data.data.participantIds.forEach((x, i) => {
+							this.pBook.participantList.push({
+								id: x.id,
+								name: x.name
+							})
+						})
+						res.data.data.fileInfoList.forEach((x, i) => {
+							let type = x.fileType.split('/')[0] == 'image' ? 'image' : res.data.data.fileType;
+							this.pBook.fileList.push({
+								'fileUrl': x.fileUrl,
+								'fileSize': x.fileSize,
+								'fileName': x.fileName,
+								'fileType': type
+							})
+						})
 					} else {
 						this.$toast(res.data.msg);
 					}
 				}).catch(res => {
 					this.$toast('系统出错了');
 				});
+
 			},
-			initService() {
+			initService(idlist) {
 				this.$axios({
 					method: 'post',
 					url: 'meeting/service',
@@ -323,13 +376,22 @@
 						meetingId: this.pBook.meetingId,
 					},
 				}).then(res => {
+					console.log(res)
 					if(res.data.code == 200) {
 						res.data.data.forEach((x, i) => {
 							if(x.status) {
+								let active = false;
+								if(idlist) {
+									idlist.forEach((y, j) => {
+										if(y == x.id) {
+											active = true;
+										}
+									})
+								}
 								this.pBook.serviceList.push({
 									'serviceName': x.serviceName,
 									'price': x.price,
-									'active': false,
+									'active': active,
 									'serviceId': x.id
 								})
 							}
@@ -522,7 +584,7 @@
 						'Content-Type': 'multipart/form-data'
 					},
 				}
-				let postFileUrl = this.$baseURL + 'meeting/file/upload';				
+				let postFileUrl = this.$baseURL + 'meeting/file/upload';
 				this.$toast.loading({
 					duration: 0,
 					message: '上传中...',
@@ -530,10 +592,15 @@
 				});
 				this.$axios.post(postFileUrl, param, config)
 					.then(res => {
-						if(res.data.code==200){
-							let dJson=res.data.data;
-							let type= res.data.data.fileType.split('/')[0]=='image'?'image':res.data.data.fileType;							
-							this.pBook.fileList.push({'fileUrl':dJson.fileUrl,'fileSize':dJson.fileSize,'fileName':dJson.fileName,'fileType':type})
+						if(res.data.code == 200) {
+							let dJson = res.data.data;
+							let type = res.data.data.fileType.split('/')[0] == 'image' ? 'image' : res.data.data.fileType;
+							this.pBook.fileList.push({
+								'fileUrl': dJson.fileUrl,
+								'fileSize': dJson.fileSize,
+								'fileName': dJson.fileName,
+								'fileType': type
+							})
 						}
 						this.$toast.clear();
 					}).catch(err => {
@@ -541,8 +608,8 @@
 						console.log(err);
 					})
 			},
-			handle_file_delete(index){
-				this.pBook.fileList.splice(index,1)
+			handle_file_delete(index) {
+				this.pBook.fileList.splice(index, 1)
 			},
 			handle_service_click(index) {
 				this.pBook.serviceList.forEach((x, i) => {
@@ -571,81 +638,127 @@
 					})
 				}
 			},
-			handle_submit(){				
+			handle_submit() {
 				if(!this.pBook.day) return this.$toast('请选择开会日期');
 				if(!this.pBook.startTime) return this.$toast('请选择会议开始时间');
 				if(!this.pBook.endTime) return this.$toast('请选择会议结束时间');
 				let eh = this.pBook.endTime.split(':')[0];
 				let em = this.pBook.endTime.split(':')[1];
-				if(em=='30'){
-					em='29'
-				}else{
-					em='59'
-					eh=checktime(parseInt(eh)-1)
+				if(em == '30') {
+					em = '29'
+				} else {
+					em = '59'
+					eh = checktime(parseInt(eh) - 1)
 				}
 				let hour = this.pBook.startTime + ':00~' + eh + ':' + em + ':59'
 				if(!this.pBook.meetingTitle) return this.$toast('请输入会议主题');
-				if(this.pBook.meetingTitle.length>20) return this.$toast('会议主题长度不超过20个字符');
-				if(this.pBook.participantList.length<1) return this.$toast('请选择会议参与人');
-				let remindMinute=0;
+				if(this.pBook.meetingTitle.length > 20) return this.$toast('会议主题长度不超过20个字符');
+				if(this.pBook.participantList.length < 1) return this.$toast('请选择会议参与人');
+				let remindMinute = 0;
 				this.remindList.label.forEach((x, i) => {
 					if(this.pBook.remind == x) {
-						remindMinute=this.remindList.value[i];
+						remindMinute = this.remindList.value[i];
 					}
 				})
-				if(this.pBook.remark.length>50) return this.$toast('备注长度不超过50个字符');
-				let serviceList=[];
-				this.pBook.serviceList.forEach((x,i)=>{
-					if(x.active){
-						serviceList.push({'serviceName':x.serviceName,'price':x.price,'serviceId':x.serviceId})
+				if(this.pBook.remark.length > 50) return this.$toast('备注长度不超过50个字符');
+				let serviceList = [];
+				this.pBook.serviceList.forEach((x, i) => {
+					if(x.active) {
+						serviceList.push({
+							'serviceName': x.serviceName,
+							'price': x.price,
+							'serviceId': x.serviceId
+						})
 					}
 				})
-				
+
 				this.$toast.loading({
 					duration: 0,
 					message: '提交中...',
 					forbidClick: true,
 					loadingType: 'spinner'
 				});
-				this.$axios({
-					method: 'post',
-					url: 'meeting/order',
-					data: {
-						openId: this.$openId,
-						meetingId:this.pBook.meetingId,
-						day:this.pBook.day,
-						hour:hour,
-						meetingTitle:this.pBook.meetingTitle,
-						participantIds:this.pBook.participantList,
-						outParticipant:this.pBook.outParticipant,
-						remindMinute:this.pBook.remindMinute,
-						expectFee:this.expectFee,
-						remark:this.pBook.remark,
-						serviceList:this.serviceList,
-						fileList:this.pBook.fileList,
-					},
-				}).then(res => {
-					console.log(res)
-					this.$toast.clear();
-					if(res.data.code == 200) {
-						if(res.data.data.flag) {
-							this.$router.push({
-								path: "/hint",
-								query: {
-									type: "meetingBookSuccess"
-								}
-							})
-						}else {
-							this.$toast(res.data.data.msg);
+				if(this.recordIdChange) {
+					this.$axios({
+						method: 'post',
+						url: 'meeting/order/update',
+						data: {
+							openId: this.$openId,
+							recordId:this.recordIdChange,
+							meetingId: this.pBook.meetingId,
+							day: this.pBook.day,
+							hour: hour,
+							meetingTitle: this.pBook.meetingTitle,
+							participantIds: this.pBook.participantList,
+							outParticipant: this.pBook.outParticipant,
+							remindMinute: remindMinute,
+							expectFee: this.expectFee,
+							remark: this.pBook.remark,
+							serviceList: serviceList,
+							fileList: this.pBook.fileList,
+						},
+					}).then(res => {
+						console.log(res)
+						this.$toast.clear();
+						if(res.data.code == 200) {
+							if(res.data.data.flag) {
+								this.$router.push({
+									path: "/hint",
+									query: {
+										type: "meetingBookChangeSuccess"
+									}
+								})
+							} else {
+								this.$toast(res.data.data.msg);
+							}
+						} else {
+							this.$toast(res.data.msg);
 						}
-					} else {
-						this.$toast(res.data.msg);
-					}
-				}).catch(res => {
-					this.$toast.clear();
-				});
+					}).catch(res => {
+						this.$toast.clear();
+					});
+				} else {
+					this.$axios({
+						method: 'post',
+						url: 'meeting/order',
+						data: {
+							openId: this.$openId,
+							meetingId: this.pBook.meetingId,
+							day: this.pBook.day,
+							hour: hour,
+							meetingTitle: this.pBook.meetingTitle,
+							participantIds: this.pBook.participantList,
+							outParticipant: this.pBook.outParticipant,
+							remindMinute: remindMinute,
+							expectFee: this.expectFee,
+							remark: this.pBook.remark,
+							serviceList: serviceList,
+							fileList: this.pBook.fileList,
+						},
+					}).then(res => {
+						console.log(res)
+						this.$toast.clear();
+						if(res.data.code == 200) {
+							if(res.data.data.flag) {
+								this.$router.push({
+									path: "/hint",
+									query: {
+										type: "meetingBookSuccess"
+									}
+								})
+							} else {
+								this.$toast(res.data.data.msg);
+							}
+						} else {
+							this.$toast(res.data.msg);
+						}
+					}).catch(res => {
+						this.$toast.clear();
+					});
+				}
 
 			},
+
 		}
 	}
 </script>

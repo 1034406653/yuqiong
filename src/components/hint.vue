@@ -112,6 +112,13 @@
 				<ColorBtn @handleBtnClick="$router.push('/meeting/my')" :btnClassName.sync='btnClassName'>查看我的会议</ColorBtn>
 			</div>
 		</div>
+		<div v-if="type=='meetingBookChangeSuccess'">
+			<img src="@/assets/img/hint_success.png" />
+			<p>会议修改成功！</p>			
+			<div class="btn_box">
+				<ColorBtn @handleBtnClick="$router.push('/meeting/my')" :btnClassName.sync='btnClassName'>查看我的会议</ColorBtn>
+			</div>
+		</div>
 		
 	</div>
 </template>
@@ -177,6 +184,8 @@
 				/*会议相关*/
 			}else if(this.$route.query.type == 'meetingBookSuccess') {
 				this.type = 'meetingBookSuccess';				
+			}else if(this.$route.query.type == 'meetingBookChangeSuccess') {
+				this.type = 'meetingBookChangeSuccess';				
 			}
 		},
 		methods: {

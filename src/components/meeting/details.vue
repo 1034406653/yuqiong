@@ -54,7 +54,7 @@
 				</div>
 				<div v-if="waitAcceptName.length>0">
 					<span>待接受</span>
-					<p><b v-for="item in waitAcceptName">{{item.name}}</b><b v-for="item in waitAcceptName">{{item.name}}</b><b v-for="item in waitAcceptName">{{item.name}}</b></p>
+					<p><b v-for="item in waitAcceptName">{{item.name}}</b></p>
 				</div>
 				<div v-if="rejectName.length>0">
 					<span>已拒绝</span>
@@ -67,10 +67,10 @@
 					<span>外部参与人数：</span>
 				</div>
 				<div class="right_item">
-					<p class="right_p">共{{outPlayerNumber}}人</p>
+					<p class="right_p">共{{outerPlayerNumber}}人</p>
 				</div>
 			</div>
-			<div class="borde"></div>
+			<div class="borde" v-if='fileInfoList.length>0'></div>
 			<div class="fileList_box" v-if='fileInfoList.length>0'>
 				<div class="label">
 					<span>会议文件：</span>
@@ -97,7 +97,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="borde"></div>
+			<div class="borde" v-if='remark'></div>
 			<div class="input_box" v-if='remark'>
 				<div class="label">
 					<span>备注：</span>
@@ -106,16 +106,17 @@
 					<p class="right_p">{{remark}}</p>
 				</div>
 			</div>
-			<div class="marginBottom20" v-if="serviceList.length>0"></div>
-			<div class="input_box" v-if="serviceList.length>0">
+			<div class="marginBottom20"></div>
+			<div class="spanList_box" v-if="serviceList.length>0">
 				<div class="label">
 					<span>服务：</span>
 				</div>
 				<div class="right_item">
-					<p class="right_p"><span v-for="item in serviceList"></span></p>
+					<div class="right_spanList"><span v-for="(item,index) in serviceList">{{item.serviceName}}*{{item.serviceAmount}}<span v-if='index<serviceList.length-1'>、</span></span></div>
 				</div>
 			</div>
-			<div class="input_box" v-if="expectFee">
+			<div class="borde" v-if="serviceList.length>0"></div>
+			<div class="input_box">
 				<div class="label">
 					<span>预计费用：</span>
 				</div>
@@ -124,9 +125,20 @@
 				</div>
 			</div>
 		</div>
-		<div class="btn_box" v-if="status==0">
+		<div class="btn_box" v-if="status==0&&sponsor">
 			<ColorBtn @handleBtnClick="handle_cancel()" :btnClassName.sync='btnClassNameWhite'>取消</ColorBtn>
 			<ColorBtn @handleBtnClick="handle_edit()" :btnClassName.sync='btnClassNameBlue'>修改会议</ColorBtn>
+		</div>
+		<div class="btn_box" v-if="status==3&&sponsor">
+			<ColorBtn @handleBtnClick="handle_new" :btnClassName.sync='btnClassNameBlue' class='btnSign'>再次预约</ColorBtn>			
+		</div>
+		<div class="btn_box" v-if="status==2&&sponsor">
+			<ColorBtn @handleBtnClick="handle_sign" :btnClassName.sync='btnClassNameWhite'>补登</ColorBtn>	
+			<ColorBtn @handleBtnClick="handle_new" :btnClassName.sync='btnClassNameBlue'>再次预约</ColorBtn>
+		</div>
+		<div class="btn_box" v-if="status==4&&!sponsor">
+			<ColorBtn @handleBtnClick="handle_deal(id, 0)" :btnClassName.sync='btnClassNameWhite'>拒绝</ColorBtn>
+			<ColorBtn @handleBtnClick="handle_deal(id, 1)" :btnClassName.sync='btnClassNameBlue'>接受</ColorBtn>
 		</div>
 	</div>
 </template>
@@ -143,13 +155,14 @@
 		data() {
 			return {
 				id: '',
+				sponsor:false,
 				fileInfoList: [],
 				subject: '',
 				address: '',
 				time: '',
 				sponsorName: '',
 				number: '',
-				outPlayerNumber: '',
+				outerPlayerNumber: '',
 				remark: '',
 				acceptName: '',
 				waitAcceptName: '',
@@ -163,6 +176,7 @@
 		},
 
 		created() {
+			console.log(this.$openId)
 			if(this.$route.query.id) {
 				this.id = this.$route.query.id;
 			} else {
@@ -179,7 +193,7 @@
 					method: 'post',
 					url: 'meeting/record/detail',
 					data: {
-						openid: this.$openid,
+						openId: this.$openId,
 						recordId: this.id,
 					},
 				}).then(res => {
@@ -190,7 +204,7 @@
 						this.address = res.data.data.address;
 						this.sponsorName = res.data.data.sponsorName;
 						this.number = res.data.data.number;
-						this.outPlayerNumber = res.data.data.outPlayerNumber;
+						this.outerPlayerNumber = res.data.data.outerPlayerNumber;
 						this.fileInfoList = res.data.data.fileInfoList;
 						this.remark = res.data.data.remark;
 						this.acceptName = res.data.data.acceptName;
@@ -199,6 +213,7 @@
 						this.serviceList = res.data.data.serviceList;
 						this.expectFee = res.data.data.expectFee;
 						this.status = res.data.data.status;
+						this.sponsor=res.data.data.sponsor;
 					} else {
 						this.$toast(res.data.msg);
 					}
@@ -250,9 +265,59 @@
 				});
 			},
 			handle_edit() {
-				let meetingBookRecordId=this.id;
-				sessionStorage.setItem("meetingBookRecordId",meetingBookRecordId)
+				let meetingBookRecordIdChange=this.id;
+				sessionStorage.setItem("meetingBookRecordIdChange",meetingBookRecordIdChange)
 				this.$router.push('/meeting/book')
+			},
+			handle_new(){
+				let meetingBookRecordIdNew=this.id;
+				sessionStorage.setItem("meetingBookRecordIdNew",meetingBookRecordIdNew)
+				this.$router.push('/meeting/book')
+			},
+			/*同意或拒绝*/
+			handle_deal(id, status) {
+				if(status == 1) {
+					this.dealConfirm(id, status);
+				} else {
+					this.$dialog.confirm({
+						message: '确定拒绝参加本次会议？',
+					}).then(() => {
+						this.dealConfirm(id, status);
+					}).catch(() => {
+						// on cancel
+					});
+				}
+			},
+			dealConfirm(id, status) {
+				this.$toast.loading({
+					duration: 0,
+					message: '提交中...',
+					forbidClick: true,
+					loadingType: 'spinner'
+				});
+				this.$axios({
+					method: 'post',
+					url: 'meeting/acceptOrReject',
+					data: {
+						openId: this.$openId,
+						recordId: id,
+						accept: status,
+					},
+				}).then(res => {
+					this.$toast.clear();
+					if(res.data.code == 200) {
+						if(res.data.data.flag) {
+							this.$toast(res.data.data.msg)
+							this.initList();
+						} else {
+							this.$toast(res.data.data.msg)
+						}
+					} else {
+						this.$toast(res.data.msg)
+					}
+				}).catch(res => {
+					this.$toast.clear();
+				});
 			},
 		}
 	}
