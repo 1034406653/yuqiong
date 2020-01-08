@@ -633,7 +633,7 @@
 				if(this.pBook.serviceList) {
 					this.pBook.serviceList.forEach((x, i) => {
 						if(x.active) {
-							this.expectFee += x.price * (this.pBook.outParticipant + this.pBook.participantList.length);
+							this.expectFee += x.price * (this.pBook.outParticipant + this.pBook.participantList.length+1);
 						}
 					})
 				}
