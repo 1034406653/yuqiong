@@ -90,9 +90,9 @@
 						<li v-for='(item,index) in pBook.fileList'>
 							<div class="main">
 								<img :src="item.fileUrl" v-if="item.fileType=='image'" />
-								<img src="@/assets/img/meeting/ppt.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.presentationml.presentation'" />
-								<img src="@/assets/img/meeting/excel.png" v-if="item.fileType=='application/vnd.ms-excel'" />
-								<img src="@/assets/img/meeting/word.png" v-if="item.fileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'" />
+								<img src="@/assets/img/meeting/ppt.png" v-if="item.ext=='ppt'||item.ext=='pptx'" />
+								<img src="@/assets/img/meeting/excel.png" v-if="item.ext=='xls'||item.ext=='xlsx'" />
+								<img src="@/assets/img/meeting/word.png" v-if="item.ext=='doc'|| item.ext=='docx'" />
 								<div class="information">
 									<p>{{item.fileName}}</p>
 									<p>{{(item.fileSize/1024).toFixed(2)}}KB</p>
@@ -352,12 +352,13 @@
 							})
 						})
 						res.data.data.fileInfoList.forEach((x, i) => {
-							let type = x.fileType.split('/')[0] == 'image' ? 'image' : res.data.data.fileType;
+							let type = x.fileType.split('/')[0] == 'image' ? 'image' : x.fileType;
 							this.pBook.fileList.push({
 								'fileUrl': x.fileUrl,
 								'fileSize': x.fileSize,
 								'fileName': x.fileName,
-								'fileType': type
+								'fileType': type,
+								'ext':x.ext,
 							})
 						})
 					} else {
@@ -599,7 +600,8 @@
 								'fileUrl': dJson.fileUrl,
 								'fileSize': dJson.fileSize,
 								'fileName': dJson.fileName,
-								'fileType': type
+								'fileType': type,
+								'ext':dJson.ext,
 							})
 						}
 						this.$toast.clear();

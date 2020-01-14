@@ -319,6 +319,9 @@
 					this.$toast.clear();
 				});
 			},
+			handle_sign(){
+				this.$toast('暂未开发')
+			}
 		}
 	}
 </script>
