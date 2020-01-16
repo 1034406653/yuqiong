@@ -1,105 +1,111 @@
 .book_page {
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     text-align: left;
-    padding-top: 76px;
-    .title {
+    position: relative;
+    .book_page_main {
         width: 100%;
-        height: 50px;
-        font-size: 36px;
-        font-weight: 600;
-        color: rgba(77, 165, 247, 1);
-        line-height: 50px;
-        letter-spacing: 2px;
-        padding: 0 30px;
-        margin: 46px 0 24px 0;
-    }
-    .input_box {
-        width: 100%;
-        height: 100px;
-        background: rgba(255, 255, 255, 1);
-        line-height: 100px;
-        padding: 0 30px;
-        position: relative;
-        &.input_box_nobg {
-            background: transparent;
+        height: 100%;
+        padding-top: 76px;
+        overflow: auto;
+        .title {
+            width: 100%;
+            height: 50px;
+            font-size: 36px;
+            font-weight: 600;
+            color: rgba(77, 165, 247, 1);
+            line-height: 50px;
+            letter-spacing: 2px;
+            padding: 0 30px;
+            margin: 46px 0 24px 0;
         }
-        .label_lxl {
-            float: left;
-            font-size: 32px;
-            color: #03274C;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .borde {
-            position: absolute;
-            width: 700px;
-            left: 50%;
-            bottom: 0;
-            margin-left: -350px;
-            height: 2px;
-            background: #EEEEEE;
-        }
-        .input_item {
-            float: right;
-            width: 66.5%;
-            height: 60px;
-            line-height: 60px;
-            margin-top: 20px;
-            text-align: right;
-            color: #99a3b0;
-            caret-color: #99a3b0;
-            font-size: 32px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-weight: normal;
-            &.followList_item {
-                padding-right: 46px;
+        .input_box {
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 1);
+            line-height: 100px;
+            padding: 0 30px;
+            position: relative;
+            &.input_box_nobg {
+                background: transparent;
+            }
+            .label_lxl {
+                float: left;
+                font-size: 32px;
+                color: #03274C;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .borde {
+                position: absolute;
+                width: 700px;
+                left: 50%;
+                bottom: 0;
+                margin-left: -350px;
+                height: 2px;
+                background: #EEEEEE;
+            }
+            .input_item {
+                float: right;
+                width: 66.5%;
+                height: 60px;
+                line-height: 60px;
+                margin-top: 20px;
+                text-align: right;
+                color: #99a3b0;
+                caret-color: #99a3b0;
+                font-size: 32px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: normal;
+                &.followList_item {
+                    padding-right: 46px;
+                }
+            }
+            input::-webkit-input-placeholder {
+                color: #99a3b0;
+            }
+            input::-moz-placeholder {
+                /* Mozilla Firefox 19+ */
+                color: #99a3b0;
+            }
+            input:-moz-placeholder {
+                /* Mozilla Firefox 4 to 18 */
+                color: #99a3b0;
+            }
+            input:-ms-input-placeholder {
+                /* Internet Explorer 10-11 */
+                color: #99a3b0;
+            }
+            input[disabled],
+            input:disabled,
+            input.disabled {
+                color: #99a3b0;
+                -webkit-text-fill-color: #999;
+                -webkit-opacity: 1;
+                opacity: 1;
+                background: #fff;
+            }
+            .icon_next {
+                position: absolute;
+                right: 30px;
+                width: 20px;
+                height: 30px;
+                top: 35px;
+                &.icon_followList {
+                    right: 20px;
+                }
             }
         }
-        input::-webkit-input-placeholder {
-            color: #99a3b0;
+        .btn_box {
+            overflow: hidden;
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
-        input::-moz-placeholder {
-            /* Mozilla Firefox 19+ */
-            color: #99a3b0;
-        }
-        input:-moz-placeholder {
-            /* Mozilla Firefox 4 to 18 */
-            color: #99a3b0;
-        }
-        input:-ms-input-placeholder {
-            /* Internet Explorer 10-11 */
-            color: #99a3b0;
-        }
-        input[disabled],
-        input:disabled,
-        input.disabled {
-            color: #99a3b0;
-            -webkit-text-fill-color: #999;
-            -webkit-opacity: 1;
-            opacity: 1;
-            background: #fff;
-        }
-        .icon_next {
-            position: absolute;
-            right: 30px;
-            width: 20px;
-            height: 30px;
-            top: 35px;
-            &.icon_followList {
-               right: 20px;
-            }
-        }
-    }
-    .btn_box {
-        overflow: hidden;
-        width: 600px;
-        margin: 0 auto;
-        margin-top: 40px;
-        margin-bottom: 40px;
     }
 }

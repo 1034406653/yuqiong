@@ -2,14 +2,7 @@
     width: 100%;
     height: 100%;
     color: #363636;
-    .meetingRoomlist_shadow {
-        position: fixed;
-        top: 159px;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }
+    position: relative;   
     .meetingRoomlist_main {
         width: 100%;
         height: 100%;
@@ -19,12 +12,13 @@
         .select_box {
             position: absolute;
             left: 0;
-            top: 77px;
+            top: 76px;
             width: 100%;
             height: auto;
-            margin-bottom: 2px;
+            border-top: 2px solid #eff2f4;
+            border-bottom: 2px solid #eff2f4;
             overflow: hidden;
-            z-index: 2;
+            z-index: 100;
             .updownBtn {
                 width: 100%;
                 height: 80px;
@@ -54,7 +48,7 @@
                 overflow: hidden;
                 &.selectContent_active {
                     width: 100%;
-                    height: 1044px;
+                    height: 974px;
                 }
                 .part {
                     width: 100%;
@@ -68,7 +62,7 @@
                     }
                     .time_box {
                         width: 100%;
-                        height: 376px;
+                        height: auto;
                         display: flex;
                         .top {
                             text-align: center;
@@ -81,13 +75,13 @@
                         .select_item {
                             width: 50%;
                             .van-picker {
-                                height: 300px;
+                                height: auto;
                                 .van-picker-column__item {
-                                    font-size: 32px;
+                                    font-size: 24px;
                                     color: rgba(54, 54, 54, 0.6);
                                     &.van-picker-column__item--selected {
                                         color: rgba(54, 54, 54, 1);
-                                        font-size: 36px;
+                                        font-size: 26px;
                                         font-weight: 500;
                                     }
                                 }

@@ -54,12 +54,13 @@
 <style lang="scss">
 	/*按钮颜色*/
 	
-	.header_box {
+	.header_box {		
 		width: 100%;
 		height: auto;
 		.header {
-			position: fixed;
-			top: 0;			
+			position: absolute;
+			top: 0;	
+			left: 0;		
 			z-index: 100;
 			width: 100%;
 			height: 76px;

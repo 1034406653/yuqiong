@@ -99,7 +99,11 @@
 								method: 'get',
 								url: '/wx/api/login',
 							}).then(res => {
-								location.href = res.data.data.url.split('&state')[0] + '&state=' + '0';
+								if(location.href.indexOf("8080")!=-1){
+									location.href = res.data.data.url.split('&state')[0] + '&state=' + '1';
+								}else{
+									location.href = res.data.data.url.split('&state')[0] + '&state=' + '0';
+								}								
 							}).catch(res => {
 								console.log(res)
 							});

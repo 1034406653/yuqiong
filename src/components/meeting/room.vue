@@ -14,7 +14,7 @@
 					</div>
 				</div>
 				<ul class="assort">
-					<li v-for="item in assort">{{item}}</li>
+					<li v-for="item in assort" v-if='item'>{{item}}</li>
 					<li>{{room.maxNumber}}人</li>
 				</ul>
 			</div>
@@ -134,7 +134,7 @@
 					console.log(res)
 					if(res.data.code == 200) {
 						this.room = res.data.data;
-						this.assort = res.data.data.assort.split(',');
+						this.assort = res.data.data.assort.split(',');						
 						this.initSelectDate();						
 					} else {
 						this.$toast(res.data.msg);
@@ -224,18 +224,28 @@
 				});
 			},
 			initRoomStatus() {
-				this.statusList = [];
-				this.timeSlice(this.room.startTime, this.room.endTime, 5);
+				let statusList = this.timeSlice(this.room.startTime, this.room.endTime, 5);
+				let orderTimeList=[];
 				if(this.room.orderTimePeriodList) {
 					this.room.orderTimePeriodList.forEach((x, i) => {
 						if(x.status == 0) {
-							this.timeSlice(x.startTime, x.endTime, 0)
+							orderTimeList.push(this.timeSlice(x.startTime, x.endTime, 0));
 						}
 						if(x.status == 1) {
-							this.timeSlice(x.startTime, x.endTime, 1)
+							orderTimeList.push(this.timeSlice(x.startTime, x.endTime, 1));
 						}
 					})
 				}
+				statusList.forEach((a,b)=>{
+					orderTimeList.forEach((c,d)=>{
+						c.forEach((e,f)=>{
+							if(a.hour==e.hour&&a.minute==e.minute){
+								a.status=e.status;
+							}
+						})
+					})
+				})
+				this.statusList=statusList;
 			},
 			changeRoomStatus(day) {				
 				this.$axios({
@@ -246,6 +256,7 @@
 						day: day,
 					},
 				}).then(res => {
+					console.log(res.data.data.orderTimePeriodList)
 					if(res.data.code == 200) {
 						this.room = res.data.data;						
 						this.initRoomStatus();
@@ -257,7 +268,6 @@
 				});
 			},
 			timeSlice(startTime, endTime, status) {
-				console.log(startTime, endTime, status)
 				let sHour = startTime.split(":")[0] || 0;
 				sHour = parseInt(sHour);
 				let sMinute = startTime.split(":")[1] || 0;
@@ -267,117 +277,85 @@
 				let eMinute = endTime.split(":")[1] || 0;
 				eMinute = parseInt(eMinute);
 				let timeList = [];
-				if(status == 5) {
-					for(let i = sHour; i <= eHour; i++) {
-						if(i == sHour) {
-							if(sMinute < 30) {
-								timeList.push({
-									'hour': checktime(sHour),
-									'minute': '00',
-									'status': status,
-								})
-							}
+				for(let i = sHour; i <= eHour; i++) {
+					if(i == sHour && i == eHour) {
+						if(sMinute == '00' && eMinute == '29') {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '00',
+								'status': status,								
+							})
+						} else if(sMinute == '00' && eMinute == '59') {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '00',
+								'status': status,								
+							})
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '30',
+								'status': status,								
+							})
+						} else if(sMinute == '30' && eMinute == '59') {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '30',
+								'status': status,								
+							})
+						}
+					} else if(i == sHour && i < eHour) {
+						if(sMinute == '00') {
 							timeList.push({
 								'hour': checktime(sHour),
-								'minute': '30',
-								'status': status,
+								'minute': '00',
+								'status': status,								
 							})
-						} else if(i == eHour) {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '30',
+								'status': status,								
+							})
+						} else {
+							timeList.push({
+								'hour': checktime(i),
+								'minute': '30',
+								'status': status,								
+							})
+						}
+
+					} else if(i > sHour && i < eHour) {
+						timeList.push({
+							'hour': checktime(i),
+							'minute': '00',
+							'status': status,							
+						})
+						timeList.push({
+							'hour': checktime(i),
+							'minute': '30',
+							'status': status,							
+						})
+					} else if(i > sHour && i == eHour) {
+						if(eMinute == '29') {
 							timeList.push({
 								'hour': checktime(eHour),
 								'minute': '00',
-								'status': status,
+								'status': status,								
 							})
-							if(eMinute > 30) {
-								timeList.push({
-									'hour': checktime(eHour),
-									'minute': '30',
-									'status': status,
-								})
-							}
 						} else {
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '00',
-								'status': status,
+								'status': status,								
 							})
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,
+								'status': status,								
 							})
 						}
 					}
-					this.statusList = timeList;
-				} else {
-					console.log(sHour,eHour)
-					for(let i = sHour; i <= eHour; i++) {
-						if(i >= sHour && i <= eHour) {
-							if(i > sHour && i < eHour) {
-								timeList.push({
-									'hour': checktime(i),
-									'minute': '00',
-									'status': status,
-								})
-								timeList.push({
-									'hour': checktime(i),
-									'minute': '30',
-									'status': status,
-								})
-							} else if(i == sHour) {
-								if(sMinute == '00') {
-									timeList.push({
-										'hour': checktime(i),
-										'minute': '00',
-										'status': status,
-									})									
-									if(eMinute == '59' || i<eHour) {
-										timeList.push({
-											'hour': checktime(i),
-											'minute': '30',
-											'status': status,
-										})
-									}
-								} else if(sMinute == '30') {
-									timeList.push({
-										'hour': checktime(i),
-										'minute': '30',
-										'status': status,
-									})
-								}
-							} else if(i == eHour) {
-								if(eMinute == '29') {
-									timeList.push({
-										'hour': checktime(i),
-										'minute': '00',
-										'status': status,
-									})
-									
-								} else if(eMinute == '59') {
-									timeList.push({
-										'hour': checktime(i),
-										'minute': '00',
-										'status': status,
-									})
-									timeList.push({
-										'hour': checktime(i),
-										'minute': '30',
-										'status': status,
-									})
-								}
-							}
-
-						}
-
-					}
-					this.statusList.forEach((x, i) => {
-						timeList.forEach((y, j) => {
-							if(x.hour == y.hour && x.minute == y.minute) {
-								x.status = y.status;
-							}
-						})
-					})
 				}
+				return timeList;
 			},
 			handle_dateSelectShow() {
 				this.dateSelectShow = true;

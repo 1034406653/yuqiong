@@ -1,86 +1,88 @@
 <template>
 	<div class="book_page" ref='book_page'>
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div class="title">
-			访客信息
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访客姓名</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.name" />
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访客手机</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.phone" />
-		</div>
-		<div class="input_box" v-if="$store.state.needIdNumber">
-			<span class="label_lxl">身份证号</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.certificateNo" />
-		</div>
-		<div class="input_box" v-if="$store.state.needCompany">
-			<span class="label_lxl">访客单位</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.company" />
-		</div>
-		<div class="input_box" v-if="$store.state.needReason">
-			<span class="label_lxl">来访事由</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_cause_show">
-				<p v-if="!causeValue">请选择</p>
-				<p v-if="causeValue">{{causeValue}}</p>
+		<div class="book_page_main">
+			<div class="title">
+				访客信息
 			</div>
-		</div>
+			<div class="input_box">
+				<span class="label_lxl">访客姓名</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.name" />
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">访客手机</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.phone" />
+			</div>
+			<div class="input_box" v-if="$store.state.needIdNumber">
+				<span class="label_lxl">身份证号</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.certificateNo" />
+			</div>
+			<div class="input_box" v-if="$store.state.needCompany">
+				<span class="label_lxl">访客单位</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.company" />
+			</div>
+			<div class="input_box" v-if="$store.state.needReason">
+				<span class="label_lxl">来访事由</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_cause_show">
+					<p v-if="!causeValue">请选择</p>
+					<p v-if="causeValue">{{causeValue}}</p>
+				</div>
+			</div>
 
-		<div class="input_box">
-			<span class="label_lxl">随访人</span>
-			<div class="input_item followList_item" @click="goInvite_followList"><span style="display: inline-block">{{pInviteData.followList.length}} <b>人</b></span><img src="@/assets/img/icon_next.png" class="icon_next icon_followList" /></div>
-		</div>
-		<div class="title">
-			被访人信息
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">被访人手机</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.receptionistPhone" />
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">被访人姓名</span>
-			<div class="borde"></div>
-			<p class="input_item">{{pInviteData.receptionistName}}</p>			
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">选择访问日期</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_date_show">
-				<p v-if="!pInviteData.visitDate">请选择</p>
-				<p v-if="pInviteData.visitDate">{{pInviteData.visitDate}}</p>
+			<div class="input_box">
+				<span class="label_lxl">随访人</span>
+				<div class="input_item followList_item" @click="goInvite_followList"><span style="display: inline-block">{{pInviteData.followList.length}} <b>人</b></span><img src="@/assets/img/icon_next.png" class="icon_next icon_followList" /></div>
 			</div>
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访问开始时间</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_startTime_show">
-				<p>{{startTime}}</p>
+			<div class="title">
+				被访人信息
 			</div>
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访问结束时间</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_endTime_show">
-				<p>{{endTime}}</p>
+			<div class="input_box">
+				<span class="label_lxl">被访人手机</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pInviteData.receptionistPhone" />
 			</div>
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">选择访问次数</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_number_show">
-				<p>{{numberValue}}</p>
+			<div class="input_box">
+				<span class="label_lxl">被访人姓名</span>
+				<div class="borde"></div>
+				<p class="input_item">{{pInviteData.receptionistName}}</p>
 			</div>
-		</div>
-		<div class="btn_box">
-			<ColorBtn @handleBtnClick="handleSubmit" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			<div class="input_box">
+				<span class="label_lxl">选择访问日期</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_date_show">
+					<p v-if="!pInviteData.visitDate">请选择</p>
+					<p v-if="pInviteData.visitDate">{{pInviteData.visitDate}}</p>
+				</div>
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">访问开始时间</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_startTime_show">
+					<p>{{startTime}}</p>
+				</div>
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">访问结束时间</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_endTime_show">
+					<p>{{endTime}}</p>
+				</div>
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">选择访问次数</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_number_show">
+					<p>{{numberValue}}</p>
+				</div>
+			</div>
+			<div class="btn_box">
+				<ColorBtn @handleBtnClick="handleSubmit" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			</div>
 		</div>
 		<div v-if="causeShow" @touchmove.prevent>
 			<van-popup v-model="causeShow" position="bottom">
@@ -91,7 +93,7 @@
 			<van-popup v-model="dateShow" position="bottom">
 				<van-datetime-picker v-model="datePicker" type="date" :min-date="startDate" @confirm='handle_date_confirm' @cancel='dateShow=false' :formatter='formatter' />
 			</van-popup>
-		</div>	
+		</div>
 		<div v-if="startTimeShow" @touchmove.prevent>
 			<van-popup v-model="startTimeShow" position="bottom">
 				<van-datetime-picker v-model="startTimePicker" type="time" @confirm='handle_startTime_confirm' @cancel='startTimeShow=false' />
@@ -101,7 +103,7 @@
 			<van-popup v-model="endTimeShow" position="bottom">
 				<van-datetime-picker v-model="endTimePicker" type="time" @confirm='handle_endTime_confirm' @cancel='endTimeShow=false' />
 			</van-popup>
-		</div>		
+		</div>
 		<div v-if="numberShow" @touchmove.prevent>
 			<van-popup v-model="numberShow" position="bottom">
 				<van-picker show-toolbar :columns="numberList.label" @cancel="numberShow = false" @confirm="handle_number_confirm" :default-index="number_index" />
@@ -114,44 +116,44 @@
 	import ColorBtn from '../common/colorBtn'
 	import HeaderNav from '../common/headerNav'
 	import Vue from 'vue';
-	import { Popup,Picker,DatetimePicker} from 'vant';
+	import { Popup, Picker, DatetimePicker } from 'vant';
 	Vue.use(Popup);
 	Vue.use(Picker);
 	Vue.use(DatetimePicker);
 	export default {
 		name: "Book",
 		data() {
-			return {				
+			return {
 				/*原因*/
 				causeShow: false,
-				causeValue: "",				
-				causeList:{
-					'cn':['商务洽谈', '技术交流', '领导视察', '面试', '其它'],
-					'en':["business", "tech", "leader", "interview", "other"],
+				causeValue: "",
+				causeList: {
+					'cn': ['商务洽谈', '技术交流', '领导视察', '面试', '其它'],
+					'en': ["business", "tech", "leader", "interview", "other"],
 				},
-				cause_index:0,
+				cause_index: 0,
 				/*日期*/
-				dateShow:false,
+				dateShow: false,
 				datePicker: new Date(),
 				startDate: new Date(),
 				datePickerVal: "",
 				dateValue: "",
 				/*时间段*/
-				startTimeShow:false,
+				startTimeShow: false,
 				startTimePicker: "00:00",
 				startTime: "00:00",
-				
-				endTimeShow:false,
+
+				endTimeShow: false,
 				endTimePicker: "23:59",
 				endTime: "23:59",
 				/*次数*/
 				numberShow: false,
-				numberValue: "不限",				
-				numberList:{
-					'label':['不限', '1次', '2次', '3次'],
-					'value':[0, 1, 2, 3],
-				},	
-				number_index:0,
+				numberValue: "不限",
+				numberList: {
+					'label': ['不限', '1次', '2次', '3次'],
+					'value': [0, 1, 2, 3],
+				},
+				number_index: 0,
 				/*参数*/
 				pInviteData: {
 					openId: this.$openId,
@@ -238,10 +240,10 @@
 					}
 				},
 				deep: true //对象内部的属性监听，也叫深度监听
-			},			
+			},
 		},
 		mounted() {
-			this.init();			
+			this.init();
 		},
 		methods: {
 			init() {
@@ -316,7 +318,7 @@
 							})
 							this.causeList.cn.forEach((x, i) => {
 								if(res.data.data.dictidReason == x) {
-									this.pInviteData.dictidReason = this.causeList.en[i];									
+									this.pInviteData.dictidReason = this.causeList.en[i];
 									this.causeValue = x;
 									this.causePickerValue = x;
 								}
@@ -342,31 +344,31 @@
 					}
 				})
 				this.causeShow = true;
-			},			
+			},
 			handle_cause_confirm(value, index) {
 				this.causeValue = value;
 				this.pInviteData.dictidReason = this.causeList.en[index];
 				this.causeShow = false;
 			},
-			
+
 			/*访问时间段*/
 			handle_startTime_show() {
 				this.startTimePicker = this.startTime;
-				this.startTimeShow=true;
+				this.startTimeShow = true;
 			},
 			handle_startTime_confirm(val) {
 				this.startTime = val;
 				this.startTimePicker = val;
-				this.startTimeShow=false;
+				this.startTimeShow = false;
 			},
 			handle_endTime_show() {
 				this.endTimePicker = this.endTime;
-				this.endTimeShow=true;
+				this.endTimeShow = true;
 			},
 			handle_endTime_confirm(val) {
 				this.endTime = val;
 				this.endTimePicker = val;
-				this.endTimeShow=false;
+				this.endTimeShow = false;
 			},
 
 			/*次数*/
@@ -378,9 +380,9 @@
 				})
 				this.numberShow = true;
 			},
-			
-			handle_number_confirm(value,index) {
-				this.numberValue = value;				
+
+			handle_number_confirm(value, index) {
+				this.numberValue = value;
 				this.pInviteData.visitTimes = this.numberList.value[index];
 				this.numberShow = false;
 			},
@@ -397,15 +399,16 @@
 				return value;　　
 			},
 			handle_date_show() {
-				if(this.pInviteData.visitDate){
-					this.datePicker=new Date(this.pInviteData.visitDate)
-				}else{
-					this.datePicker=new Date();
+				if(this.pInviteData.visitDate) {
+					this.datePicker = new Date(this.pInviteData.visitDate)
+				} else {
+					this.datePicker = new Date();
 				}
-				this.dateShow=true;
+				this.dateShow = true;
 			},
 			handle_date_confirm(val) {
-				this.datePicker=val;
+				this.datePicker = val;
+
 				function checktime(i) {
 					if(i < 10) {
 						i = "0" + i;
@@ -416,7 +419,7 @@
 				let month = val.getMonth() + 1;
 				let day = val.getDate();
 				this.pInviteData.visitDate = year + '-' + checktime(month) + '-' + checktime(day);
-				this.dateShow=false;
+				this.dateShow = false;
 			},
 			/*随访人*/
 			goInvite_followList() {

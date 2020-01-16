@@ -1,247 +1,249 @@
 <template>
-	<div class="details_page book_page" ref='details_page'>
+	<div class="visitorDetails_page" ref='details_page'>
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity=='0'|| detailsData.status=='访问中'&&detailsData.currentRequestIdentity=='0'">
-			<div class="qrcode_title">
-				通行二维码
-			</div>
-			<div class="qrcode_image_box">
-				<div ref="qrCode" :class="[isFilter ? 'qrcode_image_filter' : '', 'qrcode_image']"></div>
-				<div class="filter_hint" v-if="isFilter">
-					<img src="@/assets/img/icon_filter.png" />
-					<p>未到达访问时间<br />请耐心等候</p>
+		<div class="visitorDetails_page_main">
+			<div v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity=='0'|| detailsData.status=='访问中'&&detailsData.currentRequestIdentity=='0'">
+				<div class="qrcode_title">
+					通行二维码
+				</div>
+				<div class="qrcode_image_box">
+					<div ref="qrCode" :class="[isFilter ? 'qrcode_image_filter' : '', 'qrcode_image']"></div>
+					<div class="filter_hint" v-if="isFilter">
+						<img src="@/assets/img/icon_filter.png" />
+						<p>未到达访问时间<br />请耐心等候</p>
+					</div>
+				</div>
+				<div class="effective_time">
+					有效时间: <span>{{validPeriod}}</span>
+				</div>
+				<div class="code_box" id="url">
+					<ul class="btn_list">
+						<li v-for="(item,index) in code_list" @click="handleChangeQrcode(index)">
+							<span>复制{{item.name}}</span>
+							<div ref='linkInput' class="btn">{{item.link}}</div>
+						</li>
+					</ul>
 				</div>
 			</div>
-			<div class="effective_time">
-				有效时间: <span>{{validPeriod}}</span>
+			<div class="details_title" @click="listShow.visitor=!listShow.visitor">
+				<span>访客信息</span>
+				<img src="@/assets/img/detailes_up.png" v-if="listShow.visitor" />
+				<img src="@/assets/img/detailes_down.png" v-if="!listShow.visitor" />
 			</div>
-			<div class="code_box" id="url">
-				<ul class="btn_list">
-					<li v-for="(item,index) in code_list" @click="handleChangeQrcode(index)">
-						<span>复制{{item.name}}</span>
-						<div ref='linkInput' class="btn">{{item.link}}</div>						
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="details_title" @click="listShow.visitor=!listShow.visitor">
-			<span>访客信息</span>
-			<img src="@/assets/img/detailes_up.png" v-if="listShow.visitor" />
-			<img src="@/assets/img/detailes_down.png" v-if="!listShow.visitor" />
-		</div>
-		<div v-if="listShow.visitor" class="details_list_box">
-			<div class="input_box">
-				<span class="label_lxl">访客姓名</span>
-
-				<span class="input_item">{{detailsData.name}}</span>
-			</div>
-			<div class="input_box">
-				<span class="label_lxl">访客手机</span>
-
-				<span class="input_item">{{detailsData.phone}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.certificateNo">
-				<span class="label_lxl">身份证号</span>
-
-				<span class="input_item">{{detailsData.certificateNo}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.company">
-				<span class="label_lxl">访客单位</span>
-
-				<span class="input_item">{{detailsData.company}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.dictidReason">
-				<span class="label_lxl">来访事由</span>
-				<span class="input_item">{{detailsData.dictidReason}}</span>
-			</div>
-			<div class="input_box">
-				<span class="label_lxl">预计到访时间</span>
-				<span class="input_item">{{detailsData.planComingTime}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.followList.length>0">
-				<span class="label_lxl">随访人</span>
-				<div class="input_item followList_item" @click="goDetails_followList">{{detailsData.followList.length}}人</div>
-				<img src="@/assets/img/icon_next.png" class="icon_next icon_followList" />
-			</div>
-		</div>
-		<div class="details_title" @click="listShow.interviewee=!listShow.interviewee">
-			<span>被访人信息</span>
-			<img src="@/assets/img/detailes_up.png" v-if="listShow.interviewee" />
-			<img src="@/assets/img/detailes_down.png" v-if="!listShow.interviewee" />
-		</div>
-		<div v-if="listShow.interviewee" class="details_list_box">
-			<div class="input_box">
-				<span class="label_lxl">被访公司</span>
-
-				<span class="input_item">{{detailsData.receptionistCompany}}</span>
-			</div>
-			<div class="input_box">
-				<span class="label_lxl">被访人姓名</span>
-
-				<span class="input_item">{{detailsData.receptionistName}}</span>
-			</div>
-			<div class="input_box">
-				<span class="label_lxl">被访人手机</span>
-				<span class="input_item">{{detailsData.receptionistPhone}}</span>
-			</div>
-		</div>
-		<div class="details_title" @click="listShow.visit=!listShow.visit" v-if="detailsData.status=='已超时'||detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
-			<span>访问信息</span>
-			<img src="@/assets/img/detailes_up.png" v-if="listShow.visit" />
-			<img src="@/assets/img/detailes_down.png" v-if="!listShow.visit" />
-		</div>
-		<div v-if="listShow.visit" class="details_list_box">
-			<div class="input_box" v-if="detailsData.status=='已超时'">
-				<span class="label_lxl">超时时间</span>
-
-				<span class="input_item">{{detailsData.operateTime}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
-				<span class="label_lxl">受访开始时间</span>
-
-				<span class="input_item">{{detailsData.visitStartTime}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
-				<span class="label_lxl">受访结束时间</span>
-
-				<span class="input_item">{{detailsData.visitEndTime}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
-				<span class="label_lxl">访问次数</span>
-				<span class="input_item"><span v-if='detailsData.visitTimes==0'>不限</span><span v-if='detailsData.visitTimes!=0'>{{detailsData.visitTimes}}次</span></span>
-			</div>
-		</div>
-		<div class="details_title" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已拒绝'||detailsData.status=='已取消'" @click="listShow.operate=!listShow.operate">
-			<span>操作信息</span>
-			<img src="@/assets/img/detailes_up.png" v-if="listShow.operate" />
-			<img src="@/assets/img/detailes_down.png" v-if="!listShow.operate" />
-		</div>
-		<div v-if="listShow.operate" class="details_list_box">
-			<div class="input_box" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'">
-				<span class="label_lxl">签到时间</span>
-
-				<span class="input_item">{{detailsData.signInTime}}</span>
-			</div>
-			<div class="input_box" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'">
-				<span class="label_lxl">进出次数</span>
-
-				<span class="input_item followList_item" @click="goDetails_inOutDataList">{{detailsData.inOutDataList.length}}</span>
-				<img src="@/assets/img/icon_next.png" class="icon_next icon_followList" />
-			</div>
-			<div class="input_box" v-if="detailsData.status=='已签离'">
-				<span class="label_lxl">签离时间</span>
-
-				<span class="input_item">{{detailsData.signOutTime}}</span>
-			</div>
-			<div v-if="detailsData.status=='已拒绝'">
+			<div v-if="listShow.visitor" class="details_list_box">
 				<div class="input_box">
-					<span class="label_lxl">拒绝理由</span>
+					<span class="label_lxl">访客姓名</span>
 
-					<span class="input_item">{{detailsData.refuseReason}}</span>
+					<span class="input_item">{{detailsData.name}}</span>
 				</div>
 				<div class="input_box">
-					<span class="label_lxl">拒绝时间</span>
+					<span class="label_lxl">访客手机</span>
+
+					<span class="input_item">{{detailsData.phone}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.certificateNo">
+					<span class="label_lxl">身份证号</span>
+
+					<span class="input_item">{{detailsData.certificateNo}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.company">
+					<span class="label_lxl">访客单位</span>
+
+					<span class="input_item">{{detailsData.company}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.dictidReason">
+					<span class="label_lxl">来访事由</span>
+					<span class="input_item">{{detailsData.dictidReason}}</span>
+				</div>
+				<div class="input_box">
+					<span class="label_lxl">预计到访时间</span>
+					<span class="input_item">{{detailsData.planComingTime}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.followList.length>0">
+					<span class="label_lxl">随访人</span>
+					<div class="input_item followList_item" @click="goDetails_followList">{{detailsData.followList.length}}人</div>
+					<img src="@/assets/img/icon_next.png" class="icon_next icon_followList" />
+				</div>
+			</div>
+			<div class="details_title" @click="listShow.interviewee=!listShow.interviewee">
+				<span>被访人信息</span>
+				<img src="@/assets/img/detailes_up.png" v-if="listShow.interviewee" />
+				<img src="@/assets/img/detailes_down.png" v-if="!listShow.interviewee" />
+			</div>
+			<div v-if="listShow.interviewee" class="details_list_box">
+				<div class="input_box">
+					<span class="label_lxl">被访公司</span>
+
+					<span class="input_item">{{detailsData.receptionistCompany}}</span>
+				</div>
+				<div class="input_box">
+					<span class="label_lxl">被访人姓名</span>
+
+					<span class="input_item">{{detailsData.receptionistName}}</span>
+				</div>
+				<div class="input_box">
+					<span class="label_lxl">被访人手机</span>
+					<span class="input_item">{{detailsData.receptionistPhone}}</span>
+				</div>
+			</div>
+			<div class="details_title" @click="listShow.visit=!listShow.visit" v-if="detailsData.status=='已超时'||detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
+				<span>访问信息</span>
+				<img src="@/assets/img/detailes_up.png" v-if="listShow.visit" />
+				<img src="@/assets/img/detailes_down.png" v-if="!listShow.visit" />
+			</div>
+			<div v-if="listShow.visit" class="details_list_box">
+				<div class="input_box" v-if="detailsData.status=='已超时'">
+					<span class="label_lxl">超时时间</span>
 
 					<span class="input_item">{{detailsData.operateTime}}</span>
 				</div>
-				<div class="input_box">
-					<span class="label_lxl">操作人</span>
-					<span class="input_item">{{detailsData.operator}}</span>
+				<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
+					<span class="label_lxl">受访开始时间</span>
+
+					<span class="input_item">{{detailsData.visitStartTime}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
+					<span class="label_lxl">受访结束时间</span>
+
+					<span class="input_item">{{detailsData.visitEndTime}}</span>
+				</div>
+				<div class="input_box" v-if="detailsData.status=='待访问'||detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已失效'">
+					<span class="label_lxl">访问次数</span>
+					<span class="input_item"><span v-if='detailsData.visitTimes==0'>不限</span><span v-if='detailsData.visitTimes!=0'>{{detailsData.visitTimes}}次</span></span>
 				</div>
 			</div>
-			<div v-if="detailsData.status=='已取消'">
-				<div class="input_box">
-					<span class="label_lxl">取消时间</span>
-					<span class="input_item">{{detailsData.operateTime}}</span>
+			<div class="details_title" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'||detailsData.status=='已拒绝'||detailsData.status=='已取消'" @click="listShow.operate=!listShow.operate">
+				<span>操作信息</span>
+				<img src="@/assets/img/detailes_up.png" v-if="listShow.operate" />
+				<img src="@/assets/img/detailes_down.png" v-if="!listShow.operate" />
+			</div>
+			<div v-if="listShow.operate" class="details_list_box">
+				<div class="input_box" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'">
+					<span class="label_lxl">签到时间</span>
+
+					<span class="input_item">{{detailsData.signInTime}}</span>
 				</div>
-				<div class="input_box" v-if="detailsData.operator">
-					<span class="label_lxl">操作人</span>
-					<span class="input_item">{{detailsData.operator}}</span>
+				<div class="input_box" v-if="detailsData.status=='访问中'||detailsData.status=='已签离'">
+					<span class="label_lxl">进出次数</span>
+
+					<span class="input_item followList_item" @click="goDetails_inOutDataList">{{detailsData.inOutDataList.length}}</span>
+					<img src="@/assets/img/icon_next.png" class="icon_next icon_followList" />
+				</div>
+				<div class="input_box" v-if="detailsData.status=='已签离'">
+					<span class="label_lxl">签离时间</span>
+
+					<span class="input_item">{{detailsData.signOutTime}}</span>
+				</div>
+				<div v-if="detailsData.status=='已拒绝'">
+					<div class="input_box">
+						<span class="label_lxl">拒绝理由</span>
+
+						<span class="input_item">{{detailsData.refuseReason}}</span>
+					</div>
+					<div class="input_box">
+						<span class="label_lxl">拒绝时间</span>
+
+						<span class="input_item">{{detailsData.operateTime}}</span>
+					</div>
+					<div class="input_box">
+						<span class="label_lxl">操作人</span>
+						<span class="input_item">{{detailsData.operator}}</span>
+					</div>
+				</div>
+				<div v-if="detailsData.status=='已取消'">
+					<div class="input_box">
+						<span class="label_lxl">取消时间</span>
+						<span class="input_item">{{detailsData.operateTime}}</span>
+					</div>
+					<div class="input_box" v-if="detailsData.operator">
+						<span class="label_lxl">操作人</span>
+						<span class="input_item">{{detailsData.operator}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!--访客待访问-->
-		<div class="btn_box_1" v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnBlue'>取消访问</ColorBtn>
-		</div>
+			<!--访客待访问-->
+			<div class="btn_box_1" v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnBlue'>取消访问</ColorBtn>
+			</div>
 
-		<!--审核人待访问-->
-		<div class="btn_box_2" v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="goCopyto" :btnClassName.sync='btnWhite'>抄送</ColorBtn>
-			<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnBlue'>取消访问</ColorBtn>
-		</div>
+			<!--审核人待访问-->
+			<div class="btn_box_2" v-if="detailsData.status=='待访问'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="goCopyto" :btnClassName.sync='btnWhite'>抄送</ColorBtn>
+				<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnBlue'>取消访问</ColorBtn>
+			</div>
 
-		<!--访客已取消-->
-		<div class="btn_box_1" v-if="detailsData.status=='已取消'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
-		</div>
+			<!--访客已取消-->
+			<div class="btn_box_1" v-if="detailsData.status=='已取消'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
+			</div>
 
-		<!--审核人已取消-->
-		<div class="btn_box_1" v-if="detailsData.status=='已取消'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
-		</div>
+			<!--审核人已取消-->
+			<div class="btn_box_1" v-if="detailsData.status=='已取消'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			</div>
 
-		<!--访客已拒绝-->
-		<div class="btn_box_1" v-if="detailsData.status=='已拒绝'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
-		</div>
+			<!--访客已拒绝-->
+			<div class="btn_box_1" v-if="detailsData.status=='已拒绝'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
+			</div>
 
-		<!--审核人已拒绝-->
-		<div class="btn_box_1" v-if="detailsData.status=='已拒绝'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
-		</div>
+			<!--审核人已拒绝-->
+			<div class="btn_box_1" v-if="detailsData.status=='已拒绝'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			</div>
 
-		<!--访客待审核-->
-		<div class="btn_box_2" v-if="detailsData.status=='待审核'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnWhite'>取消访问</ColorBtn>
-			<ColorBtn @handleBtnClick="handleChangeBook" :btnClassName.sync='btnBlue'>修改访问</ColorBtn>
-		</div>
+			<!--访客待审核-->
+			<div class="btn_box_2" v-if="detailsData.status=='待审核'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleCancelVisit" :btnClassName.sync='btnWhite'>取消访问</ColorBtn>
+				<ColorBtn @handleBtnClick="handleChangeBook" :btnClassName.sync='btnBlue'>修改访问</ColorBtn>
+			</div>
 
-		<!--审核人待审核-->
-		<div class="btn_box_2" v-if="detailsData.status=='待审核'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handle_refuse_box_show()" :btnClassName.sync='btnWhite'>拒绝</ColorBtn>
-			<ColorBtn @handleBtnClick="handleAgreed" :btnClassName.sync='btnBlue'>同意</ColorBtn>
-		</div>
+			<!--审核人待审核-->
+			<div class="btn_box_2" v-if="detailsData.status=='待审核'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handle_refuse_box_show()" :btnClassName.sync='btnWhite'>拒绝</ColorBtn>
+				<ColorBtn @handleBtnClick="handleAgreed" :btnClassName.sync='btnBlue'>同意</ColorBtn>
+			</div>
 
-		<!--访客访问中-->
-		<div class="btn_box_1" v-if="detailsData.status=='访问中'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleSigned" :btnClassName.sync='btnBlue'>签离</ColorBtn>
-		</div>
+			<!--访客访问中-->
+			<div class="btn_box_1" v-if="detailsData.status=='访问中'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleSigned" :btnClassName.sync='btnBlue'>签离</ColorBtn>
+			</div>
 
-		<!--审核人访问中-->
-		<div class="btn_box_1" v-if="detailsData.status=='访问中'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleSigned" :btnClassName.sync='btnBlue'>标记签离</ColorBtn>
-		</div>
+			<!--审核人访问中-->
+			<div class="btn_box_1" v-if="detailsData.status=='访问中'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleSigned" :btnClassName.sync='btnBlue'>标记签离</ColorBtn>
+			</div>
 
-		<!--访客已签离-->
-		<div class="btn_box_1" v-if="detailsData.status=='已签离'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
-		</div>
+			<!--访客已签离-->
+			<div class="btn_box_1" v-if="detailsData.status=='已签离'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
+			</div>
 
-		<!--审核人已签离-->
-		<div class="btn_box_1" v-if="detailsData.status=='已签离'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
-		</div>
+			<!--审核人已签离-->
+			<div class="btn_box_1" v-if="detailsData.status=='已签离'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			</div>
 
-		<!--访客已失效-->
-		<div class="btn_box_1" v-if="detailsData.status=='已失效'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
-		</div>
+			<!--访客已失效-->
+			<div class="btn_box_1" v-if="detailsData.status=='已失效'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
+			</div>
 
-		<!--审核人已失效-->
-		<div class="btn_box_1" v-if="detailsData.status=='已失效'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
-		</div>
+			<!--审核人已失效-->
+			<div class="btn_box_1" v-if="detailsData.status=='已失效'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			</div>
 
-		<!--访客已超时-->
-		<div class="btn_box_1" v-if="detailsData.status=='已超时'&&detailsData.currentRequestIdentity=='0'">
-			<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
-		</div>
+			<!--访客已超时-->
+			<div class="btn_box_1" v-if="detailsData.status=='已超时'&&detailsData.currentRequestIdentity=='0'">
+				<ColorBtn @handleBtnClick="handleNewBook" :btnClassName.sync='btnBlue'>重新预约</ColorBtn>
+			</div>
 
-		<!--审核人已超时-->
-		<div class="btn_box_1" v-if="detailsData.status=='已超时'&&detailsData.currentRequestIdentity!='0'">
-			<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			<!--审核人已超时-->
+			<div class="btn_box_1" v-if="detailsData.status=='已超时'&&detailsData.currentRequestIdentity!='0'">
+				<ColorBtn @handleBtnClick="handleNewInvite" :btnClassName.sync='btnBlue'>重新邀约</ColorBtn>
+			</div>
 		</div>
 
 		<!--拒绝-->
@@ -305,7 +307,7 @@
 				btnWhite: "colorBtnWhite",
 				btnBlue: "colorBtnBlue",
 				/*复制粘贴*/
-				clipboard:null,
+				clipboard: null,
 			}
 		},
 		components: {
@@ -435,20 +437,20 @@
 			},
 			handleChangeQrcode(index) {
 				let dom = this.$refs.linkInput[index];
-				
+
 				this.clipboard = new ClipboardJS('.btn', {
-			        target: function() {
-			            return dom;
-			        }
-			    });
-			
-			    this.clipboard.on('success', function(e) {
-			        console.log(e);
-			    });
-			
-			    this.clipboard.on('error', function(e) {
-			        console.log(e);
-			    });
+					target: function() {
+						return dom;
+					}
+				});
+
+				this.clipboard.on('success', function(e) {
+					console.log(e);
+				});
+
+				this.clipboard.on('error', function(e) {
+					console.log(e);
+				});
 				this.$toast('复制成功');
 			},
 			/*随访人*/
@@ -648,7 +650,6 @@
 </script>
 
 <style lang="scss">
-	@import '../../assets/scss/visitorBook';
 	@import '../../assets/scss/visitorDetails';
 	.copy_link {
 		width: 500px;

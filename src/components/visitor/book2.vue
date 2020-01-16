@@ -1,56 +1,58 @@
 <template>
 	<div class="book_page" ref='book_page'>
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div class="title">
-			访客信息
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访客姓名</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.name" />
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">访客手机</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.phone" />
-		</div>
-		<div class="input_box" v-if="bookNeed.needIdNumber">
-			<span class="label_lxl">身份证号</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.certificateNo" />
-		</div>
-		<div class="input_box" v-if="bookNeed.needCompany">
-			<span class="label_lxl">访客单位</span>
-			<div class="borde"></div>
-			<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.company" />
-		</div>
-		<div class="input_box" v-if="bookNeed.needReason">
-			<span class="label_lxl">来访事由</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_cause_show">
-				<p v-if="!causeValue">请选择</p>
-				<p v-if="causeValue">{{causeValue}}</p>
+		<div class="book_page_main">
+			<div class="title">
+				访客信息
 			</div>
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">预计到访时间</span>
-			<div class="borde"></div>
-			<div class="input_item" @click="handle_datetime_show">
-				<p v-if="!pGuestAppointment.planComingTime">请选择</p>
-				<p v-if="pGuestAppointment.planComingTime">{{pGuestAppointment.planComingTime}}</p>
+			<div class="input_box">
+				<span class="label_lxl">访客姓名</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.name" />
 			</div>
-		</div>
-		<div class="input_box">
-			<span class="label_lxl">随访人</span>
-			<div class="input_item followList_item" @click="goBook_followList"><span style="display: inline-block">{{pGuestAppointment.followList.length}} <b>人</b></span><img src="@/assets/img/icon_next.png" class="icon_next icon_followList" /></div>
-		</div>
-		<!--新增-->
-		<div class="btn_box" v-if='bookType!="change"'>
-			<ColorBtn @handleBtnClick="handleSubmit" :btnClassName.sync='btnClassName'>提交</ColorBtn>
-		</div>
-		<!--修改-->
-		<div class="btn_box" v-if='bookType=="change"'>
-			<ColorBtn @handleBtnClick="handleSubmit_change" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			<div class="input_box">
+				<span class="label_lxl">访客手机</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.phone" />
+			</div>
+			<div class="input_box" v-if="bookNeed.needIdNumber">
+				<span class="label_lxl">身份证号</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.certificateNo" />
+			</div>
+			<div class="input_box" v-if="bookNeed.needCompany">
+				<span class="label_lxl">访客单位</span>
+				<div class="borde"></div>
+				<input type="text" placeholder="请输入" class="input_item" v-model="pGuestAppointment.company" />
+			</div>
+			<div class="input_box" v-if="bookNeed.needReason">
+				<span class="label_lxl">来访事由</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_cause_show">
+					<p v-if="!causeValue">请选择</p>
+					<p v-if="causeValue">{{causeValue}}</p>
+				</div>
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">预计到访时间</span>
+				<div class="borde"></div>
+				<div class="input_item" @click="handle_datetime_show">
+					<p v-if="!pGuestAppointment.planComingTime">请选择</p>
+					<p v-if="pGuestAppointment.planComingTime">{{pGuestAppointment.planComingTime}}</p>
+				</div>
+			</div>
+			<div class="input_box">
+				<span class="label_lxl">随访人</span>
+				<div class="input_item followList_item" @click="goBook_followList"><span style="display: inline-block">{{pGuestAppointment.followList.length}} <b>人</b></span><img src="@/assets/img/icon_next.png" class="icon_next icon_followList" /></div>
+			</div>
+			<!--新增-->
+			<div class="btn_box" v-if='bookType!="change"'>
+				<ColorBtn @handleBtnClick="handleSubmit" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			</div>
+			<!--修改-->
+			<div class="btn_box" v-if='bookType=="change"'>
+				<ColorBtn @handleBtnClick="handleSubmit_change" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			</div>
 		</div>
 
 		<div v-if="causeShow" @touchmove.prevent>
@@ -79,20 +81,20 @@
 		data() {
 			return {
 				bookType: '',
-				
-				causeShow: false,				
+
+				causeShow: false,
 				causeValue: "",
 				causeList: {
 					'cn': ['商务洽谈', '技术交流', '领导视察', '面试', '其它'],
 					'en': ["business", "tech", "leader", "interview", "other"],
-				},	
-				cause_index:0,
-				
+				},
+				cause_index: 0,
+
 				datetimeShow: false,
 				datePicker: new Date(),
 				startDate: new Date(),
 				dateValue: "",
-				
+
 				pGuestAppointment: {
 					openId: this.$openId,
 					name: "",
@@ -158,23 +160,26 @@
 					return `${value}月`　　
 				} else if(type === 'day') {　　
 					return `${value}日`　　
-				}　else if(type === 'hour') {　　
+				}　
+				else if(type === 'hour') {　　
 					return `${value}时`　　
-				}　else if(type === 'minute') {　　
+				}　
+				else if(type === 'minute') {　　
 					return `${value}分`　　
 				}　　
 				return value;　　
 			},
 			handle_datetime_show() {
-				if(this.pGuestAppointment.planComingTime){
-					this.datePicker=new Date(this.pGuestAppointment.planComingTime)
-				}else{
-					this.datePicker=new Date();
+				if(this.pGuestAppointment.planComingTime) {
+					this.datePicker = new Date(this.pGuestAppointment.planComingTime)
+				} else {
+					this.datePicker = new Date();
 				}
 				this.datetimeShow = true;
 			},
 			handle_datetime_confirm(val) {
-				this.datePicker=val;
+				this.datePicker = val;
+
 				function checktime(i) {
 					if(i < 10) {
 						i = "0" + i;

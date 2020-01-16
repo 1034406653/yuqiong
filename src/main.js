@@ -62,8 +62,8 @@ router.beforeEach((to, from, next) => {
 				method: 'get',
 				url: '/wx/api/login',
 			}).then(res => {
-				let formPath = '2'
-				//let formPath = '3'				
+				//let formPath = '2'
+				let formPath = '3'				
 				location.href = res.data.data.url.split('&state')[0] + "&state=" + formPath;
 			}).catch(res => {
 				console.log(res)
@@ -73,8 +73,8 @@ router.beforeEach((to, from, next) => {
 				method: 'get',
 				url: '/wx/api/login',
 			}).then(res => {
-				let formPath = '1'
-				//let formPath = '0'				
+				//let formPath = '1'
+				let formPath = '0'				
 				location.href = res.data.data.url.split('&state')[0] + "&state=" + formPath;
 			}).catch(res => {
 				console.log(res)

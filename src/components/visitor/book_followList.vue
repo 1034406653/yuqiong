@@ -1,30 +1,33 @@
 <template>
 	<div class="followList_page">
 		<headerNav @bNavBack="navBack"></headerNav>
-		<ul v-for="(item,index) in book_followList">
-			<li>
-				<img src="@/assets/img/icon_close.png" @click="handleDeletePeople(index)" class="close" />
-				<div class="morePeople_title">
-					随访人{{index+1}}
-				</div>
-				<div class="input_box">
-					<span>姓名</span>
-					<input type="text" v-model="item.name" placeholder="请输入" />
-				</div>
-				<div class="input_box">
-					<span>手机</span>
-					<input type="text" v-model="item.phone" placeholder="请输入" />
-				</div>
-				<div class="input_box" v-if="bookNeed.needIdNumber">
-					<span>身份证号</span>
-					<input type="text" v-model="item.certificateNo" placeholder="请输入" />
-				</div>
-			</li>
-		</ul>
-		<div class="add" @click="handleAddPeople">添加随访人</div>
-		<div class="bottom">
-			<ColorBtn @handleBtnClick="handleConfirm" :btnClassName.sync='btnClassName'>确定</ColorBtn>
+		<div class="followList_page_main">
+			<ul v-for="(item,index) in book_followList">
+				<li>
+					<img src="@/assets/img/icon_close.png" @click="handleDeletePeople(index)" class="close" />
+					<div class="morePeople_title">
+						随访人{{index+1}}
+					</div>
+					<div class="input_box">
+						<span>姓名</span>
+						<input type="text" v-model="item.name" placeholder="请输入" />
+					</div>
+					<div class="input_box">
+						<span>手机</span>
+						<input type="text" v-model="item.phone" placeholder="请输入" />
+					</div>
+					<div class="input_box" v-if="bookNeed.needIdNumber">
+						<span>身份证号</span>
+						<input type="text" v-model="item.certificateNo" placeholder="请输入" />
+					</div>
+				</li>
+			</ul>
+			<div class="add" @click="handleAddPeople">添加随访人</div>
+			<div class="bottom">
+				<ColorBtn @handleBtnClick="handleConfirm" :btnClassName.sync='btnClassName'>确定</ColorBtn>
+			</div>
 		</div>
+
 	</div>
 </template>
 
@@ -50,7 +53,7 @@
 		components: {
 			HeaderNav,
 			ColorBtn
-		},		
+		},
 		mounted() {
 			if(window.localStorage.getItem('pGuestAppointment')) {
 				this.pGuestAppointment = JSON.parse(window.localStorage.getItem('pGuestAppointment'));
@@ -90,10 +93,10 @@
 				let phoneArr = [];
 				let certificateNoArr = [];
 				this.book_followList.forEach((x, i) => {
-					x.name=trim(x.name)
-					x.phone=allTrim(x.phone)				
-					if(this.bookNeed.needIdNumber){
-						x.certificateNo=trim(x.certificateNo)
+					x.name = trim(x.name)
+					x.phone = allTrim(x.phone)
+					if(this.bookNeed.needIdNumber) {
+						x.certificateNo = trim(x.certificateNo)
 					}
 					let noPhone = true;
 					phoneArr.forEach((y, j) => {
@@ -109,7 +112,7 @@
 					});
 					if(this.bookNeed.needIdNumber) {
 						let noCertificateNo = true;
-						x.certificateNo=allTrim(x.certificateNo)
+						x.certificateNo = allTrim(x.certificateNo)
 						certificateNoArr.forEach((y, j) => {
 							if(y.certificateNo == x.certificateNo) {
 								noCertificateNo = false;

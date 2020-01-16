@@ -1,0 +1,108 @@
+.message_page {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    .nav_list {
+        width: 100%;
+        height: 90px;
+        display: flex;
+        background: #fff;
+        border-top: 2px solid #eff2f4;
+        margin-bottom: 10px;
+        position: absolute;
+        z-index: 100;
+        left: 0;
+        top: 76px;
+        li {
+            width: 20%;
+            height: 90px;
+            padding: 0 24px;
+            span {
+                display: block;
+                height: 86px;
+                line-height: 86px;
+                font-size: 32px;
+                font-weight: 500;
+            }
+            b {
+                width: 100%;
+                height: 4px;
+                background: #359EF9;
+                border-radius: 2px;
+                display: block;
+            }
+            &.active {
+                span {
+                    color: #359EF9;
+                }
+            }
+        }
+    }
+    .list-box {
+        width: 100%;
+        height: 100%;
+        padding-top: 168px;
+        overflow: auto;
+        .li-box {
+            min-height: 1100px;
+        }
+        .van-list {
+            ul {
+                padding-top: 2px;
+                width: 100%;
+                li {
+                    width: 100%;
+                    height: auto;
+                    background: #fff;
+                    padding-top: 14px;
+                    padding: 24px 30px 10px 38px;
+                    border-bottom: 2px solid #eee;
+                    .title {
+                        width: 100%;
+                        height: 40px;
+                        line-height: 40px;
+                        i {
+                            float: left;
+                            display: block;
+                            width: 14px;
+                            height: 14px;
+                            background: rgba(248, 86, 84, 1);
+                            margin-top: 12px;
+                            margin-right: 12px;
+                            border-radius: 50%;
+                            &.ibgwhite {
+                                background: transparent;
+                            }
+                        }
+                        span {
+                            float: left;
+                            font-size: 32px;
+                            width: 400px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            color: rgba(3, 39, 76, 1);
+                            text-align: left;
+                        }
+                        b {
+                            font-size: 26px;
+                            color: #97A1AF;
+                            float: right;
+                            text-align: right;
+                        }
+                    }
+                    .text {
+                        margin-top: 13px;
+                        line-height: 40px;
+                        font-size: 28px;
+                        color: rgba(151, 161, 175, 1);
+                        padding-left: 20px;
+                        text-align: left;
+                        margin-bottom: 13px;
+                    }
+                }
+            }
+        }
+    }
+}

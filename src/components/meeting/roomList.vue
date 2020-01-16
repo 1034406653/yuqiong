@@ -1,8 +1,8 @@
 <template>
 	<div class="meetingRoomlist">
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div class="meetingRoomlist_main">
-			<div class="meetingRoomlist_shadow" v-if="selectContentShow"></div>
+		<div class="shadow_lxl" v-if="selectContentShow"></div>
+		<div class="meetingRoomlist_main">			
 			<div class="select_box">
 				<div class="updownBtn" @click="selectContentShow=!selectContentShow">
 					<span>高级筛选</span>
@@ -18,13 +18,13 @@
 								<div class="top">
 									开会日期
 								</div>
-								<van-picker :columns="dateList" :default-index="0" @change="onChangeSelectDate" :item-height='30' v-if='selectTimeShow' />
+								<van-picker :columns="dateList" :default-index="0" @change="onChangeSelectDate" :item-height='24' v-if='selectTimeShow' />
 							</div>
 							<div class="select_item">
 								<div class="top">
 									开会时间
 								</div>
-								<van-picker :columns="timeList" :default-index="0" @change="onChangeSelectTime" :item-height='30' v-if='selectTimeShow' />
+								<van-picker :columns="timeList" :default-index="0" @change="onChangeSelectTime" :item-height='24' v-if='selectTimeShow' />
 							</div>
 						</div>
 					</div>
