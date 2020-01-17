@@ -72,7 +72,7 @@ router.beforeEach((to, from, next) => {
 			axios({
 				method: 'get',
 				url: '/wx/api/login',
-			}).then(res => {
+			}).then(res => {			 
 				//let formPath = '1'
 				let formPath = '0'				
 				location.href = res.data.data.url.split('&state')[0] + "&state=" + formPath;

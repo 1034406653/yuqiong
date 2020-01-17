@@ -89,7 +89,7 @@
 								</div>
 								<div class="download">
 									<img src="@/assets/img/meeting/download.png" />
-									<a :href="item.fileUrl" download=""></a>
+									<a :href="item.fileUrl" :download="item.fileName"></a>
 								</div>
 							</div>
 
