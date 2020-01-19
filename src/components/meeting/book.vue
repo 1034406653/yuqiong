@@ -132,11 +132,12 @@
 					</div>
 				</div>
 			</div>
+			<div class="totalFee">预计费用：{{expectFee}}元</div>
+			<div class="btn_box">
+				<ColorBtn @handleBtnClick="handle_submit()" :btnClassName.sync='btnClassName'>提交</ColorBtn>
+			</div>
 		</div>
-		<div class="totalFee">预计费用：{{expectFee}}元</div>
-		<div class="btn_box">
-			<ColorBtn @handleBtnClick="handle_submit()" :btnClassName.sync='btnClassName'>提交</ColorBtn>
-		</div>
+
 		<div v-if="dayShow" @touchmove.prevent>
 			<van-popup v-model="dayShow" position="bottom">
 				<van-picker show-toolbar :columns="pBook.dayList" :default-index="dayIndex" @confirm='handle_day_confirm' @cancel='dayShow=false' />
@@ -284,13 +285,16 @@
 				}).then(res => {
 					console.log(res)
 					if(res.data.code == 200) {
-						if(!this.recordIdChange){
+						if(!this.recordIdChange) {
 							this.pBook.name = res.data.data.name;
-						}						
+						}
 						this.pBook.roomPrice = res.data.data.price;
 						this.pBook.openWeek = res.data.data.openWeek;
 						this.pBook.configStart = res.data.data.startTime.split(':')[0];
 						this.pBook.configEnd = res.data.data.endTime.split(':')[0];
+						if(res.data.data.endTime.split(':')[1]=='59'){
+							this.pBook.configEnd=Number(this.pBook.configEnd)+1;							
+						}
 						this.initSelectDate();
 					} else {
 						this.$toast(res.data.msg);
@@ -300,7 +304,7 @@
 				});
 			},
 			initChangeBook() {
-				let recordId=this.recordIdChange||this.recordIdNew;
+				let recordId = this.recordIdChange || this.recordIdNew;
 				/*获取上个记录信息*/
 				this.$axios({
 					method: 'post',
@@ -314,9 +318,9 @@
 					if(res.data.code == 200) {
 						this.pBook.meetingId = res.data.data.meetingId;
 						let time = res.data.data.time.split(' ');
-						if(this.recordIdChange){
+						if(this.recordIdChange) {
 							this.pBook.day = time[0];
-						}						
+						}
 						/*初始化配置*/
 						this.init();
 						let serviceIdList = [];
@@ -358,7 +362,7 @@
 								'fileSize': x.fileSize,
 								'fileName': x.fileName,
 								'fileType': type,
-								'ext':x.ext,
+								'ext': x.ext,
 							})
 						})
 					} else {
@@ -430,7 +434,7 @@
 							let week = newDate.getDay();
 							switch(week) {
 								case 0:
-									dateWeek = '周天';
+									dateWeek = '周日';
 									break;
 								case 1:
 									dateWeek = '周一';
@@ -577,7 +581,7 @@
 			},
 			handleFileChange(event) {
 				let file = event.currentTarget.files[0];
-				console.log(file);
+				this.$refs.inputer.value = '';
 				let param = new FormData();
 				param.append('file', file)
 				let config = {
@@ -601,7 +605,7 @@
 								'fileSize': dJson.fileSize,
 								'fileName': dJson.fileName,
 								'fileType': type,
-								'ext':dJson.ext,
+								'ext': dJson.ext,
 							})
 						}
 						this.$toast.clear();
@@ -635,7 +639,7 @@
 				if(this.pBook.serviceList) {
 					this.pBook.serviceList.forEach((x, i) => {
 						if(x.active) {
-							this.expectFee += x.price * (this.pBook.outParticipant + this.pBook.participantList.length+1);
+							this.expectFee += x.price * (this.pBook.outParticipant + this.pBook.participantList.length + 1);
 						}
 					})
 				}
@@ -653,7 +657,7 @@
 					eh = checktime(parseInt(eh) - 1)
 				}
 				let hour = this.pBook.startTime + ':00~' + eh + ':' + em + ':59'
-				if(!this.pBook.meetingTitle) return this.$toast('请输入会议主题');
+				if(checkStr(this.pBook.meetingTitle, '会议主题')) return this.$toast(checkStr(this.pBook.meetingTitle, '会议主题'));
 				if(this.pBook.meetingTitle.length > 20) return this.$toast('会议主题长度不超过20个字符');
 				if(this.pBook.participantList.length < 1) return this.$toast('请选择会议参与人');
 				let remindMinute = 0;
@@ -686,7 +690,7 @@
 						url: 'meeting/order/update',
 						data: {
 							openId: this.$openId,
-							recordId:this.recordIdChange,
+							recordId: this.recordIdChange,
 							meetingId: this.pBook.meetingId,
 							day: this.pBook.day,
 							hour: hour,

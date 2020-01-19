@@ -1,9 +1,9 @@
 <template>
 	<div class="meetingRoomlist">
 		<headerNav @bNavBack="navBack"></headerNav>
-		<div class="shadow_lxl" v-if="selectContentShow"></div>
+		<div class="shadow_lxl" v-if="selectContentShow" @touchmove.prevent></div>
 		<div class="meetingRoomlist_main">			
-			<div class="select_box">
+			<div class="select_box" @touchmove.prevent>
 				<div class="updownBtn" @click="selectContentShow=!selectContentShow">
 					<span>高级筛选</span>
 					<img src="@/assets/img/meeting/up.png" />

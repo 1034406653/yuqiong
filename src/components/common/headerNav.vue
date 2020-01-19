@@ -64,6 +64,7 @@
 			z-index: 100;
 			width: 100%;
 			height: 76px;
+			border-bottom: 2px solid #FAFAFA;
 			background: #fff;
 			overflow: hidden;
 			.nav_back {

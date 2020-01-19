@@ -25,7 +25,7 @@
                 display: flex;
                 justify-content: center;
                 background: #fff;
-                margin-bottom: 2px;
+                border-bottom: 2px solid #E5E5E5;
                 background: #fff;
                 span {
                     width: 120px;
@@ -62,7 +62,7 @@
                     }
                     .time_box {
                         width: 100%;
-                        height: auto;
+                        height: 290px;
                         display: flex;
                         .top {
                             text-align: center;
@@ -175,11 +175,15 @@
                         width: 480px;
                         text-align: left;
                         .p1 {
+                            width: 100%;
                             font-size: 32px;
                             line-height: 44px;
+                            height: 44px;
                             margin-top: 10px;
                             font-weight: 600;
                             overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         }
                         .p2 {
                             width: 100%;
@@ -189,7 +193,7 @@
                             margin-top: 4px;
                             font-size: 24px;
                             overflow: hidden;
-                            white-space: normal;
+                            white-space: nowrap;
                             text-overflow: ellipsis;
                         }
                         div {
@@ -214,12 +218,15 @@
                         p {
                             width: 100%;
                             text-align: right;
-                            font-size: 32px;
+                            font-size: 30px;
+                            height: 44px;
                             line-height: 44px;
                             margin-top: 20px;
                             margin-bottom: 16px;
                             font-weight: 600;
                             overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         }
                         span {
                             display: block;

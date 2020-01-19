@@ -25,7 +25,7 @@
 					</div>
 					<div class="label">
 						<p><b class="colorGreen"></b><span>已预订</span></p>
-						<p><b class="colorYellow"></b><span>已开始</span></p>
+						<p><b class="colorYellow"></b><span>会议中</span></p>
 					</div>
 				</div>
 				<div class="select_date">
@@ -64,11 +64,11 @@
 					</div>
 				</div>
 			</div>
+			<div class="btn_box">
+				<ColorBtn @handleBtnClick="handle_nav_book()" :btnClassName.sync='btnClassName'>立即预订</ColorBtn>
+			</div>
+		</div>
 
-		</div>
-		<div class="btn_box">
-			<ColorBtn @handleBtnClick="handle_nav_book()" :btnClassName.sync='btnClassName'>立即预订</ColorBtn>
-		</div>
 		<div v-if="dateSelectShow" @touchmove.prevent>
 			<van-popup v-model="dateSelectShow" position="bottom">
 				<van-picker show-toolbar :columns="dateSelectList" :default-index="dateIndex" @confirm='handle_date_confirm' @cancel='dateSelectShow=false' />
@@ -91,7 +91,7 @@
 				/*按钮*/
 				btnClassName: "colorBtnBlue",
 				room: {},
-				selectDay:'',
+				selectDay: '',
 				assort: [],
 				dateSelectShow: false,
 				dateIndex: 0,
@@ -134,8 +134,8 @@
 					console.log(res)
 					if(res.data.code == 200) {
 						this.room = res.data.data;
-						this.assort = res.data.data.assort.split(',');						
-						this.initSelectDate();						
+						this.assort = res.data.data.assort.split(',');
+						this.initSelectDate();
 					} else {
 						this.$toast(res.data.msg);
 					}
@@ -153,7 +153,7 @@
 					},
 				}).then(res => {
 					if(res.data.code == 200) {
-						let maxDays = parseInt(res.data.data.subscribeMpAdvanceDays);						
+						let maxDays = parseInt(res.data.data.subscribeMpAdvanceDays);
 						for(let i = 0; i < maxDays; i++) {
 							let newDate = new Date();
 							newDate.setDate(newDate.getDate() + i);
@@ -163,15 +163,15 @@
 							let day = newDate.getDate();
 							let dateDay = checktime(month) + '.' + checktime(day);
 							let dateWeek = '';
-							let dateValue = year + '-' + checktime(month) + '-' + checktime(day);							
+							let dateValue = year + '-' + checktime(month) + '-' + checktime(day);
 							if(dateValue == this.selectDay) {
 								active = true;
-								this.selectDay=dateValue;
+								this.selectDay = dateValue;
 							}
 							let week = newDate.getDay();
 							switch(week) {
 								case 0:
-									dateWeek = '周天';
+									dateWeek = '周日';
 									break;
 								case 1:
 									dateWeek = '周一';
@@ -207,15 +207,15 @@
 								}
 							})
 						}
-						let hasActive=false;
-						this.dateSelectList.forEach((x,i)=>{
-							if(x.active){
-								hasActive=true;
+						let hasActive = false;
+						this.dateSelectList.forEach((x, i) => {
+							if(x.active) {
+								hasActive = true;
 							}
 						})
-						if(!hasActive){
-							this.dateSelectList[0].active=true;
-							this.selectDay=this.dateSelectList[0].text;														
+						if(!hasActive) {
+							this.dateSelectList[0].active = true;
+							this.selectDay = this.dateSelectList[0].text;
 						}
 						this.changeRoomStatus(this.selectDay);
 					}
@@ -225,7 +225,7 @@
 			},
 			initRoomStatus() {
 				let statusList = this.timeSlice(this.room.startTime, this.room.endTime, 5);
-				let orderTimeList=[];
+				let orderTimeList = [];
 				if(this.room.orderTimePeriodList) {
 					this.room.orderTimePeriodList.forEach((x, i) => {
 						if(x.status == 0) {
@@ -236,18 +236,18 @@
 						}
 					})
 				}
-				statusList.forEach((a,b)=>{
-					orderTimeList.forEach((c,d)=>{
-						c.forEach((e,f)=>{
-							if(a.hour==e.hour&&a.minute==e.minute){
-								a.status=e.status;
+				statusList.forEach((a, b) => {
+					orderTimeList.forEach((c, d) => {
+						c.forEach((e, f) => {
+							if(a.hour == e.hour && a.minute == e.minute) {
+								a.status = e.status;
 							}
 						})
 					})
 				})
-				this.statusList=statusList;
+				this.statusList = statusList;
 			},
-			changeRoomStatus(day) {				
+			changeRoomStatus(day) {
 				this.$axios({
 					method: 'post',
 					url: 'meeting/detail',
@@ -258,7 +258,7 @@
 				}).then(res => {
 					console.log(res.data.data.orderTimePeriodList)
 					if(res.data.code == 200) {
-						this.room = res.data.data;						
+						this.room = res.data.data;
 						this.initRoomStatus();
 					} else {
 						this.$toast(res.data.msg);
@@ -283,24 +283,24 @@
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '00',
-								'status': status,								
+								'status': status,
 							})
 						} else if(sMinute == '00' && eMinute == '59') {
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '00',
-								'status': status,								
+								'status': status,
 							})
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,								
+								'status': status,
 							})
 						} else if(sMinute == '30' && eMinute == '59') {
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,								
+								'status': status,
 							})
 						}
 					} else if(i == sHour && i < eHour) {
@@ -308,18 +308,18 @@
 							timeList.push({
 								'hour': checktime(sHour),
 								'minute': '00',
-								'status': status,								
+								'status': status,
 							})
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,								
+								'status': status,
 							})
 						} else {
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,								
+								'status': status,
 							})
 						}
 
@@ -327,30 +327,30 @@
 						timeList.push({
 							'hour': checktime(i),
 							'minute': '00',
-							'status': status,							
+							'status': status,
 						})
 						timeList.push({
 							'hour': checktime(i),
 							'minute': '30',
-							'status': status,							
+							'status': status,
 						})
 					} else if(i > sHour && i == eHour) {
 						if(eMinute == '29') {
 							timeList.push({
 								'hour': checktime(eHour),
 								'minute': '00',
-								'status': status,								
+								'status': status,
 							})
 						} else {
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '00',
-								'status': status,								
+								'status': status,
 							})
 							timeList.push({
 								'hour': checktime(i),
 								'minute': '30',
-								'status': status,								
+								'status': status,
 							})
 						}
 					}
@@ -360,11 +360,11 @@
 			handle_dateSelectShow() {
 				this.dateSelectShow = true;
 			},
-			handle_dateSelect_change(id) {				
+			handle_dateSelect_change(id) {
 				this.dateSelectList.forEach((x, i) => {
 					if(id == i) {
-						x.active = true;						
-						this.selectDay=x.text;
+						x.active = true;
+						this.selectDay = x.text;
 					} else {
 						x.active = false;
 					}
